@@ -6,9 +6,14 @@
     
     <modelVersion>4.0.0</modelVersion>
     
-    <groupId>BankUml</groupId>
-    <artifactId>BankUml</artifactId>
+    <groupId>MyBankUml</groupId>
+    <artifactId>MyBankUml</artifactId>
     <version>1.0</version>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
     
     <dependencies>
         <dependency>
@@ -16,6 +21,24 @@
             <artifactId>lombok</artifactId>
             <version>1.18.30</version>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.15.2</version>
+        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <mainClass>Main</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
     
 </project>
