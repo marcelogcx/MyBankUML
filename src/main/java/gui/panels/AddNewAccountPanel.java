@@ -15,6 +15,7 @@ import core.PanelEventListener;
 import core.ThemeManager;
 import gui.components.RoundedButton;
 import gui.components.RoundedComboBox;
+import gui.components.RoundedPanel;
 import gui.components.RoundedTextField;
 
 public class AddNewAccountPanel extends JPanel {
@@ -22,6 +23,7 @@ public class AddNewAccountPanel extends JPanel {
     private PanelEventListener listener;
     private Client c;
 
+    private JPanel formPanel;
     private JLabel[] labels;
     private RoundedTextField[] textFields;
     private RoundedComboBox<String> accountTypeBox;
@@ -47,51 +49,57 @@ public class AddNewAccountPanel extends JPanel {
         labels[1].setBounds(10, 50, 500, 40);
         ThemeManager.styleProfileLabel(labels[1]);
 
+        formPanel = new RoundedPanel(25);
+        ThemeManager.styleSecondaryPanel(formPanel);
+        formPanel.setBounds(10, 100, 500, 400);
+
         // Account Name Label
         labels[2] = new JLabel("Account Name");
-        labels[2].setBounds(10, 100, 200, 50);
+        labels[2].setBounds(10, 10, 200, 50);
         ThemeManager.styleFieldLabel(labels[2]);
 
         // Account Name Text Field
         textFields[0] = new RoundedTextField(false);
-        textFields[0].setBounds(10, 150, 345, 40);
+        textFields[0].setBounds(10, 60, 345, 40);
         ThemeManager.styleRoundedTextField(textFields[0]);
 
         // Account Type Label
         labels[3] = new JLabel("Account Type");
-        labels[3].setBounds(10, 190, 200, 50);
+        labels[3].setBounds(10, 110, 200, 50);
         ThemeManager.styleFieldLabel(labels[3]);
 
         // Account Type Combo Box
         String[] accountTypeValues = { "CHECKING", "SAVING", "BUSINESS" };
         accountTypeBox = new RoundedComboBox<>(accountTypeValues);
-        accountTypeBox.setBounds(10, 240, 345, 40);
+        accountTypeBox.setBounds(10, 160, 345, 40);
         ThemeManager.styleRoundedComboBox(accountTypeBox);
 
         // Initial Deposit Label
         labels[4] = new JLabel("Initial Deposit (Optional)");
-        labels[4].setBounds(10, 280, 200, 50);
+        labels[4].setBounds(10, 210, 200, 50);
         ThemeManager.styleFieldLabel(labels[4]);
 
         // Initial Deposit Text Field
         textFields[1] = new RoundedTextField(true);
-        textFields[1].setBounds(10, 330, 345, 40);
+        textFields[1].setBounds(10, 260, 345, 40);
         ThemeManager.styleRoundedTextField(textFields[1]);
 
         addNewBankAccountButton = new RoundedButton("Add New Bank Account");
         addNewBankAccountActionListener(addNewBankAccountButton);
-        addNewBankAccountButton.setBounds(10, 405, 270, 40);
+        addNewBankAccountButton.setBounds(10, 330, 270, 40);
         ThemeManager.styleButton(addNewBankAccountButton);
 
-        for (JLabel l : labels) {
-            add(l);
-        }
+        formPanel.add(labels[2]);
+        formPanel.add(labels[3]);
+        formPanel.add(labels[4]);
         for (RoundedTextField tf : textFields) {
-            add(tf);
+            formPanel.add(tf);
         }
-        add(accountTypeBox);
-        add(addNewBankAccountButton);
-
+        formPanel.add(accountTypeBox);
+        formPanel.add(addNewBankAccountButton);
+        add(labels[0]);
+        add(labels[1]);
+        add(formPanel);
     }
 
     public void addNewBankAccountActionListener(JButton button) {
