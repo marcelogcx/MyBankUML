@@ -1,4 +1,4 @@
-package gui.panels;
+package gui.panels.subpanels;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -12,36 +12,36 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import bank.Client;
+import bank.Admin;
+import bank.Teller;
 import core.Database;
 import core.PanelEventListener;
 import core.ThemeManager;
 import gui.components.RoundedButton;
 
-public class SidebarPanel extends JPanel {
-    private PanelEventListener listener;
+public class AdminSidebarPanel extends JPanel {
+    private PanelEventListener panelEventListener;
     private Database db;
-    private Client c;
+    private Admin a;
 
-    private final ImageIcon HOME_ICON = new ImageIcon(getClass().getResource("/img/home.png"));
-    private final ImageIcon HOME_ACCENT_ICON = new ImageIcon(getClass().getResource("/img/home-hover.png"));
+    private final ImageIcon SEARCH_ICON = new ImageIcon(getClass().getResource("/img/search-icon.png"));
+    private final ImageIcon SEARCH_ACCENT_ICON = new ImageIcon(getClass().getResource("/img/search-hover-icon.png"));
     private final ImageIcon PROFILE_ICON = new ImageIcon(getClass().getResource("/img/profile.png"));
     private final ImageIcon PROFILE_ACCENT_ICON = new ImageIcon(getClass().getResource("/img/profile-hover.png"));
-    private final ImageIcon TRANSACTIONS_ICON = new ImageIcon(getClass().getResource("/img/transactions-icon.png"));
     private JButton[] buttons;
     private int selectedButtonIndex = 0;
 
-    SidebarPanel(Database db, PanelEventListener listener, Client c) {
-        this.listener = listener;
-        this.c = c;
+    public AdminSidebarPanel(Database db, PanelEventListener panelEventListener, Admin a) {
+        this.panelEventListener = panelEventListener;
+        this.a = a;
         this.db = db;
         ThemeManager.styleMainPanel(this);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        String[] buttonNames = { "Dashboard", "My Profile", "Transactions" };
-        ImageIcon[] buttonNormalIcons = { HOME_ICON, PROFILE_ICON, TRANSACTIONS_ICON };
-        ImageIcon[] buttonAccentIcons = { HOME_ACCENT_ICON, PROFILE_ACCENT_ICON, TRANSACTIONS_ICON };
-        String[] redirectionPanelNames = { "dashboard", "profile", "transactions" };
+        String[] buttonNames = { "Search Clients", "Profile" };
+        ImageIcon[] buttonNormalIcons = { SEARCH_ICON, PROFILE_ICON };
+        ImageIcon[] buttonAccentIcons = { SEARCH_ACCENT_ICON, PROFILE_ACCENT_ICON };
+        String[] redirectionPanelNames = { "dashboard", "profile" };
         this.buttons = initiateButtons(buttonNames, buttonNormalIcons, buttonAccentIcons);
         setButtonBehavior(redirectionPanelNames, buttonNormalIcons, buttonAccentIcons);
 
@@ -53,7 +53,8 @@ public class SidebarPanel extends JPanel {
 
     private JButton[] initiateButtons(String[] buttonNames, ImageIcon[] buttonNormalIcons,
             ImageIcon[] buttonAccentIcons) {
-        JButton[] buttons = new JButton[3];
+        int numButtons = buttonNames.length;
+        JButton[] buttons = new JButton[numButtons];
         for (int i = 0; i < buttons.length; i++) {
             if (i == 0) {
                 buttons[i] = new RoundedButton(buttonNames[i], buttonAccentIcons[i]);
@@ -103,16 +104,10 @@ public class SidebarPanel extends JPanel {
                     buttons[INDEX].setIcon(buttonAccentIcons[INDEX]);
                     switch (redirectionalPanelNames[INDEX]) {
                         case "dashboard":
-                            DashboardPanel dp = new DashboardPanel(db, listener, c);
-                            listener.onEvent(redirectionalPanelNames[INDEX], dp, new Dimension(0, 0));
+                            panelEventListener.onShowEvent(redirectionalPanelNames[INDEX]);
                             break;
                         case "profile":
-                            ProfilePanel pp = new ProfilePanel(c);
-                            listener.onEvent(redirectionalPanelNames[INDEX], pp, new Dimension(0, 0));
-                            break;
-                        case "transactions":
-                            TransactionsPanel tp = new TransactionsPanel(db, c);
-                            listener.onEvent(redirectionalPanelNames[INDEX], tp, new Dimension(0, 0));
+                            panelEventListener.onShowEvent(redirectionalPanelNames[INDEX]);
                             break;
                     }
                 }
@@ -127,5 +122,4 @@ public class SidebarPanel extends JPanel {
             buttons[i].setIcon(buttonNormalIcons[i]);
         }
     }
-
 }

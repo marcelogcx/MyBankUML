@@ -1,4 +1,4 @@
-package gui.panels;
+package gui.panels.subpanels;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -15,6 +15,7 @@ import core.Database;
 import core.PanelEventListener;
 import core.ThemeManager;
 import gui.components.RoundedButton;
+import gui.panels.mainpanels.LoginPanel;
 
 public class HeaderPanel extends JPanel {
     private Database db;
@@ -25,7 +26,7 @@ public class HeaderPanel extends JPanel {
     private JLabel title;
     private JButton logout;
 
-    HeaderPanel(Database db, PanelEventListener listener) {
+    public HeaderPanel(Database db, PanelEventListener listener) {
         this.db = db;
         this.listener = listener;
         ThemeManager.styleSecondaryPanel(this);
@@ -53,7 +54,7 @@ public class HeaderPanel extends JPanel {
         button.addActionListener((ActionEvent e) -> {
             if (e.getSource() == button) {
                 LoginPanel loginPanel = new LoginPanel(db, listener);
-                listener.onEvent("login", loginPanel, new Dimension(500, 500));
+                listener.onAddEvent("login", loginPanel, new Dimension(500, 500));
             }
 
         });

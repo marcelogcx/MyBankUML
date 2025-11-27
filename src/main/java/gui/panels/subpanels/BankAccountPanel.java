@@ -1,4 +1,4 @@
-package gui.panels;
+package gui.panels.subpanels;
 
 import java.awt.Color;
 import java.awt.Cursor;

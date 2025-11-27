@@ -1,4 +1,4 @@
-package gui.panels;
+package gui.panels.mainpanels;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -17,10 +17,11 @@ import bank.Client;
 import core.*;
 import gui.components.RoundedButton;
 import gui.components.RoundedTextField;
+import bank.User;
 
 public class LoginPanel extends JPanel {
 
-    private PanelEventListener listener;
+    private PanelEventListener panelEventListener;
     private Database db;
 
     private JLabel[] labels;
@@ -29,9 +30,9 @@ public class LoginPanel extends JPanel {
     private RoundedTextField passwordTextField;
     private JButton loginButton;
 
-    public LoginPanel(Database db, PanelEventListener listener) {
+    public LoginPanel(Database db, PanelEventListener panelEventListener) {
 
-        this.listener = listener;
+        this.panelEventListener = panelEventListener;
         this.db = db;
 
         ThemeManager.styleMainPanel(this);
@@ -67,6 +68,7 @@ public class LoginPanel extends JPanel {
         passwordTextField.setPlaceholder("Enter your password");
         ThemeManager.styleRoundedTextField(passwordTextField);
 
+        // Login Button
         loginButton = new RoundedButton("Log In");
         addLoginActionListener(loginButton);
         loginButton.setBounds((500 - 300) / 2, 330, 300, 40);
@@ -106,13 +108,13 @@ public class LoginPanel extends JPanel {
                 return;
             }
             String userId = db.getIdFromUsername(username);
-            Client c = db.readRecord(Client.class, userId);
-            if (!c.getPassword().equals(password)) {
+            User u = db.readRecord(User.class, userId);
+            if (!u.getPassword().equals(password)) {
                 System.out.println("wrong password");
                 return;
             }
-            MainPanel mp = new MainPanel(db, listener, c);
-            listener.onEvent("main", mp, new Dimension(1024, 768));
+            JPanel mainPanel = u.createMainPanel(db, panelEventListener);
+            panelEventListener.onAddEvent("main", mainPanel, new Dimension(1024, 768));
         });
 
     }
@@ -121,8 +123,8 @@ public class LoginPanel extends JPanel {
         label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                RegistrationPanel rp = new RegistrationPanel(db, listener);
-                listener.onEvent("registration", rp, new Dimension(750, 500));
+                RegistrationPanel rp = new RegistrationPanel(db, panelEventListener);
+                panelEventListener.onAddEvent("registration", rp, new Dimension(750, 500));
                 resetTextFields();
             }
         });

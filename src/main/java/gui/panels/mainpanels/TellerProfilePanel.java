@@ -1,4 +1,4 @@
-package gui.panels;
+package gui.panels.mainpanels;
 
 import java.awt.Color;
 
@@ -6,12 +6,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import bank.Client;
+import bank.Teller;
+import bank.User;
 import core.ThemeManager;
 import gui.components.RoundedLabel;
 import gui.components.RoundedPanel;
 
-public class ProfilePanel extends JPanel {
+public class TellerProfilePanel extends JPanel {
     private JLabel[] labels;
     private JPanel personalInfoPanel;
     private JPanel membershipDetailsPanel;
@@ -26,7 +27,7 @@ public class ProfilePanel extends JPanel {
     private final ImageIcon ACCOUNT_DISTRIBUTION_ICON = new ImageIcon(
             getClass().getResource("/img/account-distribution-icon.png"));
 
-    ProfilePanel(Client c) {
+    public TellerProfilePanel(User u) {
         ThemeManager.styleMainPanel(this);
 
         labels = new JLabel[20];
@@ -34,21 +35,21 @@ public class ProfilePanel extends JPanel {
         // Title
         labels[0] = new JLabel("My Profile");
         labels[0].setBounds(10, 10, 300, 40);
-        ThemeManager.styleH2(labels[0]);
+        ThemeManager.styleTitlePanel(labels[0]);
 
         // Description
         labels[1] = new JLabel("Your personal information and membership details.");
         labels[1].setBounds(10, 50, 500, 40);
         ThemeManager.styleDescription(labels[1]);
 
-        initiatePersonalInfoPanel(c);
-        initiateMembershipDetailsPanel(c);
+        initiatePersonalInfoPanel(u);
+        // initiateMembershipDetailsPanel(t);
 
         add(labels[0]);
         add(labels[1]);
     }
 
-    private void initiatePersonalInfoPanel(Client c) {
+    private void initiatePersonalInfoPanel(User u) {
         personalInfoPanel = new RoundedPanel(25);
         personalInfoPanel.setLayout(null);
         personalInfoPanel.setBackground(Color.WHITE);
@@ -66,7 +67,7 @@ public class ProfilePanel extends JPanel {
         labels[3].setBounds(10, 75, 300, 25);
 
         // Full Name Value
-        labels[4] = new JLabel(c.getFullname());
+        labels[4] = new JLabel(u.getFullname());
         ThemeManager.styleProfileValue(labels[4]);
         labels[4].setBounds(35, 110, 300, 25);
 
@@ -77,7 +78,7 @@ public class ProfilePanel extends JPanel {
         labels[5].setBounds(10, 155, 300, 25);
 
         // Email Value
-        labels[6] = new JLabel(c.getEmail());
+        labels[6] = new JLabel(u.getEmail());
         ThemeManager.styleProfileValue(labels[6]);
         labels[6].setBounds(35, 190, 300, 25);
 
@@ -88,7 +89,7 @@ public class ProfilePanel extends JPanel {
         labels[7].setBounds(10, 235, 300, 25);
 
         // Username Value
-        labels[8] = new JLabel(c.getUsername());
+        labels[8] = new JLabel(u.getUsername());
         ThemeManager.styleProfileValue(labels[8]);
         labels[8].setBounds(35, 270, 300, 25);
 
@@ -109,67 +110,6 @@ public class ProfilePanel extends JPanel {
             personalInfoPanel.add(labels[i]);
         }
         add(personalInfoPanel);
-    }
-
-    private void initiateMembershipDetailsPanel(Client c) {
-        membershipDetailsPanel = new RoundedPanel(25);
-        membershipDetailsPanel.setLayout(null);
-        membershipDetailsPanel.setBackground(Color.WHITE);
-        membershipDetailsPanel.setBounds(392, 100, 372, 392);
-
-        // Membership Details Title
-        labels[11] = new JLabel("Membership Details");
-        ThemeManager.styleProfileTitle(labels[11]);
-        labels[11].setBounds(10, 20, 300, 25);
-
-        // Member Since Label
-        labels[12] = new JLabel("Member Since");
-        labels[12].setIcon(MEMBER_SINCE_ICON);
-        ThemeManager.styleProfileLabel(labels[12]);
-        labels[12].setBounds(10, 75, 300, 25);
-
-        // Member Since Value
-        labels[13] = new JLabel("2024-01-15");
-        ThemeManager.styleProfileValue(labels[13]);
-        labels[13].setBounds(35, 110, 300, 25);
-
-        // User ID Label
-        labels[14] = new JLabel("User ID");
-        labels[14].setIcon(USER_ID_ICON);
-        ThemeManager.styleProfileLabel(labels[14]);
-        labels[14].setBounds(10, 155, 300, 25);
-
-        // User ID Value
-        labels[15] = new JLabel(c.getId());
-        ThemeManager.styleProfileValue(labels[15]);
-        labels[15].setBounds(35, 190, 300, 25);
-
-        // Total Accounts Label
-        labels[16] = new JLabel("Total Accounts");
-        labels[16].setIcon(USERNAME_ICON);
-        ThemeManager.styleProfileLabel(labels[16]);
-        labels[16].setBounds(10, 235, 300, 25);
-
-        // Total Accounts Value
-        labels[17] = new JLabel(c.getBankAccountIds().size() + " accounts");
-        ThemeManager.styleProfileValue(labels[17]);
-        labels[17].setBounds(35, 270, 300, 25);
-
-        // Total Portfolio Label
-        labels[18] = new JLabel("Total Portfolio Value");
-        labels[18].setIcon(ACCOUNT_DISTRIBUTION_ICON);
-        ThemeManager.styleProfileLabel(labels[18]);
-        labels[18].setBounds(10, 315, 300, 25);
-
-        // Total Portfolio Value
-        labels[19] = new JLabel("$4,500.00");
-        ThemeManager.styleProfileValue(labels[19]);
-        labels[19].setBounds(35, 350, 300, 25);
-
-        for (int i = 11; i < 20; i++) {
-            membershipDetailsPanel.add(labels[i]);
-        }
-        add(membershipDetailsPanel);
     }
 
 }

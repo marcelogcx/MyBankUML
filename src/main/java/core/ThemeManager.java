@@ -135,7 +135,7 @@ public class ThemeManager {
         cb.setSelectionHoverColor(HYPERLINK_COLOR);
     }
 
-    public static void styleH2(JLabel title) {
+    public static void styleTitlePanel(JLabel title) {
         title.setForeground(MAIN_ACCENT_COLOR);
         title.setFont(H2_FONT);
     }

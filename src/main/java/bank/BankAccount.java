@@ -1,10 +1,13 @@
 package bank;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import core.BankAccountListener;
 
 public class BankAccount {
+    private List<BankAccountListener> listeners = new ArrayList<>();
     private String id;
     private String accountName;
     private BankAccountType bankAccountType;
@@ -19,6 +22,14 @@ public class BankAccount {
         this.bankAccountType = bankAccountType;
         this.balance = balance;
         this.operationIds = operationIds;
+    }
+
+    public void addListener(BankAccountListener bal) {
+        listeners.add(bal);
+    }
+
+    public void removeListener(BankAccountListener bal) {
+        listeners.remove(bal);
     }
 
     public void linkOperationId(String operationId) {
@@ -47,6 +58,9 @@ public class BankAccount {
 
     public void setBalance(double amount) {
         balance += amount;
+        for (BankAccountListener bal : listeners) {
+            bal.onOperation(balance);
+        }
     }
 
     @Override

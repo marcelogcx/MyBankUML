@@ -1,4 +1,4 @@
-package gui.panels;
+package gui.panels.subpanels;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 
 import javax.swing.JButton;
+import javax.swing.JPanel;
 
 import bank.BankAccount;
 import core.Database;
@@ -19,7 +20,8 @@ public class TransactionBarPanel extends RoundedPanel {
     JButton[] buttons;
     private int selectedButtonIndex = 0;
 
-    TransactionBarPanel(PanelEventListener listener, Database db, BankAccount selectedAccount) {
+    public TransactionBarPanel(PanelEventListener listener, Database db, BankAccount selectedAccount,
+            JPanel currentPanel) {
         super(15);
         this.listener = listener;
 
@@ -35,10 +37,11 @@ public class TransactionBarPanel extends RoundedPanel {
             add(buttons[i]);
         }
         ThemeManager.styleSelectedButton(buttons[0]);
-        setButtonBehavior(redirectionalPanelNames, db, selectedAccount);
+        setButtonBehavior(redirectionalPanelNames, db, selectedAccount, currentPanel);
     }
 
-    private void setButtonBehavior(String[] redirectionalPanelNames, Database db, BankAccount selectedAccount) {
+    private void setButtonBehavior(String[] redirectionalPanelNames, Database db, BankAccount selectedAccount,
+            JPanel currentPanel) {
         for (int i = 0; i < buttons.length; i++) {
             final int INDEX = i;
             buttons[i].addMouseListener(new MouseAdapter() {
@@ -63,16 +66,16 @@ public class TransactionBarPanel extends RoundedPanel {
                     ThemeManager.styleSelectedButton(buttons[INDEX]);
                     switch (redirectionalPanelNames[INDEX]) {
                         case "deposit":
-                            DepositPanel dp = new DepositPanel(db, selectedAccount);
-                            listener.onEvent(redirectionalPanelNames[INDEX], dp, new Dimension(0, 0));
+                            currentPanel.setSize(744, 350);
+                            listener.onShowEvent(redirectionalPanelNames[INDEX]);
                             break;
                         case "withdraw":
-                            WithdrawPanel wp = new WithdrawPanel(db, selectedAccount);
-                            listener.onEvent(redirectionalPanelNames[INDEX], wp, new Dimension(0, 0));
+                            currentPanel.setSize(744, 350);
+                            listener.onShowEvent(redirectionalPanelNames[INDEX]);
                             break;
                         case "transfer":
-                            TransferPanel tp = new TransferPanel(db, selectedAccount);
-                            listener.onEvent(redirectionalPanelNames[INDEX], tp, new Dimension(0, 0));
+                            currentPanel.setSize(744, 430);
+                            listener.onShowEvent(redirectionalPanelNames[INDEX]);
                             break;
                     }
                 }

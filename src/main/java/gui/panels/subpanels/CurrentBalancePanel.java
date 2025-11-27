@@ -1,12 +1,14 @@
-package gui.panels;
+package gui.panels.subpanels;
 
 import javax.swing.JLabel;
 
 import bank.BankAccount;
+import core.BankAccountListener;
 import core.ThemeManager;
 import gui.components.RoundedPanel;
 
-public class CurrentBalancePanel extends RoundedPanel {
+public class CurrentBalancePanel extends RoundedPanel
+        implements BankAccountListener {
     private JLabel[] labels;
     private BankAccount selectedAccount;
 
@@ -14,6 +16,7 @@ public class CurrentBalancePanel extends RoundedPanel {
         super(25);
 
         this.selectedAccount = selectedAccount;
+        selectedAccount.addListener(this);
 
         ThemeManager.styleSecondaryPanel(this);
 
@@ -41,10 +44,19 @@ public class CurrentBalancePanel extends RoundedPanel {
     }
 
     public void setSelectedAccount(BankAccount selectedAccount) {
+        this.selectedAccount.removeListener(this);
         this.selectedAccount = selectedAccount;
+        this.selectedAccount.addListener(this);
         labels[1]
                 .setText(this.selectedAccount.getBankAccountType() + " ACCOUNT" + " - " + this.selectedAccount.getId());
         labels[2].setText("$" + this.selectedAccount.getBalance());
+        revalidate();
+        repaint();
+    }
+
+    @Override
+    public void onOperation(double balance) {
+        labels[2].setText("$" + balance);
         revalidate();
         repaint();
     }

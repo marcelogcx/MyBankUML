@@ -5,14 +5,18 @@ import java.net.URISyntaxException;
 import java.util.*;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import bank.Admin;
 import bank.BankAccount;
 import bank.BankAccountType;
 import bank.BankOperation;
 import bank.Client;
 import bank.Deposit;
+import bank.Teller;
 import bank.Transfer;
+import bank.User;
 import bank.UserType;
 import bank.Withdrawal;
 
@@ -20,7 +24,7 @@ public class Database {
     private final String USER_FILE = "/user.json";
     private final String BANK_ACCOUNT_FILE = "/bankAccount.json";
     private final String BANK_OPERATION_FILE = "/bankOperation.json";
-    private Map<String, Client> users;
+    private Map<String, User> users;
     private Map<String, String> usernames;
     private Map<String, BankAccount> bankAccounts;
     private Map<String, BankOperation> bankOperations;
@@ -42,15 +46,15 @@ public class Database {
         ObjectMapper mapper = new ObjectMapper();
 
         try {
-            // Determine base directory (JAR folder or classes folder)
-            File jarDir = new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI());
-            File baseDir = jarDir.isFile() ? jarDir.getParentFile() : jarDir;
-
-            // Create data folder inside base directory
+            File baseDir = new File(System.getProperty("user.dir"));
             File dataDir = new File(baseDir, "data");
+
             if (!dataDir.exists()) {
-                dataDir.mkdirs();
+                boolean created = dataDir.mkdirs();
+                if (created)
+                    System.out.println("Created new data directory at: " + dataDir.getAbsolutePath());
             }
+
             // External files to read if exist
             File usersFile = new File(dataDir, USER_FILE);
             File bankAccountsFile = new File(dataDir, BANK_ACCOUNT_FILE);
@@ -64,12 +68,20 @@ public class Database {
                 System.err.println("Users JSON file not found.");
                 return;
             }
-            users = mapper.readValue(iStreamUsers, new TypeReference<Map<String, Client>>() {
+
+            Map<String, User> tempUsers = mapper.readValue(iStreamUsers, new TypeReference<Map<String, User>>() {
             });
-            for (String userId : users.keySet()) {
-                usedIds.add(userId);
-                usernames.put(users.get(userId).getUsername(), userId);
+
+            for (Map.Entry<String, User> entry : tempUsers.entrySet()) {
+                String id = entry.getKey();
+                User u = entry.getValue();
+
+                usedIds.add(id);
+                usernames.put(u.getUsername(), id);
+
+                users.put(id, u);
             }
+
             idGen = new IdGenerator(usedIds);
 
             // Load Bank Accounts
@@ -101,7 +113,7 @@ public class Database {
                     new TypeReference<Map<String, BankOperation>>() {
                     });
 
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -112,10 +124,26 @@ public class Database {
             String id = idGen.generateClientId();
             Client tempClient = new Client(id, UserType.CLIENT, recordData[0], recordData[1],
                     recordData[2],
-                    recordData[3], new ArrayList<String>());
+                    recordData[3], new ArrayList<String>(), false);
             users.put(id, tempClient);
             usernames.put(tempClient.getUsername(), id);
             return c.cast(tempClient);
+        }
+        if (c == Teller.class) {
+            String id = idGen.generateClientId();
+            Teller tempTeller = new Teller(id, UserType.TELLER, recordData[0], recordData[1],
+                    recordData[2], recordData[3], false);
+            users.put(id, tempTeller);
+            usernames.put(tempTeller.getUsername(), id);
+            return c.cast(tempTeller);
+        }
+        if (c == Admin.class) {
+            String id = idGen.generateClientId();
+            Admin tempAdmin = new Admin(id, UserType.ADMIN, recordData[0], recordData[1],
+                    recordData[2], recordData[3], false);
+            users.put(id, tempAdmin);
+            usernames.put(tempAdmin.getUsername(), id);
+            return c.cast(tempAdmin);
         } else if (c == BankAccount.class) {
             String id = idGen.generateBankAccountId();
             BankAccount bankAccountTemp = new BankAccount(id, recordData[0], BankAccountType.valueOf(recordData[1]),
@@ -148,9 +176,9 @@ public class Database {
     }
 
     public <T> T readRecord(Class<T> c, String id) {
-        if (c == Client.class) {
-            Client tempClient = users.get(id);
-            return c.cast(tempClient);
+        if (c == User.class) {
+            User tempUser = users.get(id);
+            return c.cast(tempUser);
         } else if (c == BankAccount.class) {
             BankAccount tempBankAccount = bankAccounts.get(id);
             return c.cast(tempBankAccount);
@@ -162,8 +190,15 @@ public class Database {
         }
     }
 
-    public void deleteRecord() {
-
+    public <T> T deleteRecord(Class<T> c, String id) {
+        if (c == User.class) {
+            User tempUser = readRecord(User.class, id);
+            usernames.remove(tempUser.getUsername());
+            users.remove(id);
+            return c.cast(tempUser);
+        } else {
+            throw new IllegalArgumentException("Unsupported Type: " + c);
+        }
     }
 
     public boolean usernameExists(String username) {
@@ -174,8 +209,8 @@ public class Database {
         return usernames.get(username);
     }
 
-    public ArrayList<BankAccount> getClientBankAccounts(ArrayList<String> bankAccountIds) {
-        ArrayList<BankAccount> tempBankAccounts = new ArrayList<>();
+    public List<BankAccount> getClientBankAccounts(List<String> bankAccountIds) {
+        List<BankAccount> tempBankAccounts = new ArrayList<>();
         for (String id : bankAccountIds) {
             tempBankAccounts.add(bankAccounts.get(id));
         }
@@ -190,22 +225,39 @@ public class Database {
         return tempBankOperations;
     }
 
+    public User[] getClients(User u) {
+        if (u.getUserType() == UserType.CLIENT) {
+            System.err.println("You are not allowed to get clients.");
+            return null;
+        }
+        return users.values().stream().filter(user -> user.getUserType() == UserType.CLIENT)
+                .toArray(User[]::new);
+    }
+
+    public User[] getClientsAndTellers(User u) {
+        if (u.getUserType() != UserType.ADMIN) {
+            System.err.println("You are not allowed to get clients.");
+            return null;
+        }
+        return users.values().stream()
+                .filter(user -> user.getUserType() == UserType.CLIENT || user.getUserType() == UserType.TELLER)
+                .toArray(User[]::new);
+
+    }
+
     public void saveFiles() {
 
         ObjectMapper mapper = new ObjectMapper();
         try {
-            File jarFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI());
-            File baseDir = jarFile.isFile() ? jarFile.getParentFile() : jarFile;
-
-            // Create data folder inside base directory
+            File baseDir = new File(System.getProperty("user.dir"));
             File dataDir = new File(baseDir, "data");
+
             if (!dataDir.exists()) {
                 boolean created = dataDir.mkdirs();
-                if (!created) {
-                    System.err.println("Failed to create data directory at " + dataDir.getAbsolutePath());
-                    return; // early exit if data folder cannot be created
-                }
+                if (created)
+                    System.out.println("Created new data directory at: " + dataDir.getAbsolutePath());
             }
+
             // Build full file paths inside data folder
             File usersFile = new File(dataDir, USER_FILE);
             File bankAccountsFile = new File(dataDir, BANK_ACCOUNT_FILE);
@@ -227,7 +279,7 @@ public class Database {
 
             System.out.println("All maps saved successfully.");
 
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             System.err.println("Failed to save files: " + e.getMessage());
             e.printStackTrace();
         }

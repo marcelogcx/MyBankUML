@@ -1,4 +1,4 @@
-package gui.panels;
+package gui.panels.mainpanels;
 
 import java.awt.Color;
 import java.util.ArrayList;

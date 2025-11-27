@@ -1,73 +1,57 @@
 package bank;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JPanel;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Client {
+import core.ClientListener;
+import core.Database;
+import core.PanelEventListener;
+import gui.panels.mainpanels.ClientMainPanel;
 
-    private String id;
-    private UserType userType;
-    private String fullname;
-    private String email;
-    private String username;
-    private String password;
-    private ArrayList<String> bankAccountIds;
+public class Client extends User {
+    private List<ClientListener> listeners = new ArrayList<>();
+    private List<String> bankAccountIds;
 
     @JsonCreator
     public Client(@JsonProperty("id") String id, @JsonProperty("userType") UserType userType,
             @JsonProperty("fullname") String fullname,
             @JsonProperty("email") String email,
             @JsonProperty("username") String username, @JsonProperty("password") String password,
-            @JsonProperty("accountIds") ArrayList<String> bankAccountIds) {
-        this.id = id;
-        this.userType = userType;
-        this.fullname = fullname;
-        this.email = email;
-        this.username = username;
-        this.password = password;
+            @JsonProperty("accountIds") ArrayList<String> bankAccountIds,
+            @JsonProperty("isUserBlocked") boolean isUserBlocked) {
+        super(id, userType, fullname, email, username, password, isUserBlocked);
         this.bankAccountIds = bankAccountIds;
+    }
+
+    public void addListener(ClientListener cl) {
+        listeners.add(cl);
     }
 
     public void linkBankAccount(String bankAccountId) {
         this.bankAccountIds.add(bankAccountId);
+        for (ClientListener cl : listeners) {
+            cl.onAdditionBankAccount(bankAccountIds);
+        }
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public UserType getUserType() {
-        return userType;
-    }
-
-    public String getFullname() {
-        return fullname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public ArrayList<String> getBankAccountIds() {
+    public List<String> getBankAccountIds() {
         return bankAccountIds;
     }
 
     @Override
     public String toString() {
-        return id + " " + fullname + " " + email + " " + username + " " + password + " " + bankAccountIds;
+        return getId() + " " + getFullname() + " " + getEmail() + " " + getUsername() + " " + getPassword() + " "
+                + bankAccountIds;
     }
+
+    @Override
+    public JPanel createMainPanel(Database db, PanelEventListener panelEventListener) {
+        return new ClientMainPanel(db, panelEventListener, this);
+    }
+
 }

@@ -3,7 +3,7 @@ package bank;
 import java.awt.CardLayout;
 import javax.swing.*;
 import core.*;
-import gui.panels.LoginPanel;
+import gui.panels.mainpanels.LoginPanel;
 
 public class MyBankUml {
     private JFrame mainFrame;

@@ -57,7 +57,11 @@ public class ModernScrollBarUI extends BasicScrollBarUI {
 
     @Override
     protected Dimension getMinimumThumbSize() {
-        return new Dimension(THICKNESS, 40);
+        if (scrollbar.getOrientation() == Adjustable.VERTICAL) {
+            return new Dimension(THICKNESS, 40);
+        } else {
+            return new Dimension(40, THICKNESS);
+        }
     }
 
     @Override

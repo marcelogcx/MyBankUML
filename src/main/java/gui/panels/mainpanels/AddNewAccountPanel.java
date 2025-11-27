@@ -1,4 +1,4 @@
-package gui.panels;
+package gui.panels.mainpanels;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -42,7 +42,7 @@ public class AddNewAccountPanel extends JPanel {
         // Title
         labels[0] = new JLabel("Add New Bank Account");
         labels[0].setBounds(10, 10, 400, 40);
-        ThemeManager.styleH2(labels[0]);
+        ThemeManager.styleTitlePanel(labels[0]);
 
         // Description
         labels[1] = new JLabel("Enter the details below to open a new bank account");
@@ -116,8 +116,7 @@ public class AddNewAccountPanel extends JPanel {
                 ba.linkOperationId(initialDeposit.getId());
                 db.saveFiles();
 
-                DashboardPanel dp = new DashboardPanel(db, listener, c);
-                listener.onEvent("dashboard", dp, new Dimension(0, 0));
+                listener.onShowEvent("dashboard");
             }
 
         });

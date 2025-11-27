@@ -1,21 +1,23 @@
-package gui.panels;
+package gui.panels.subpanels;
 
 import java.awt.event.ActionEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import bank.BankAccount;
 import bank.Transfer;
 import core.Database;
+import core.SelectedAccountListener;
 import core.ThemeManager;
 import gui.components.RoundedButton;
 import gui.components.RoundedPanel;
 import gui.components.RoundedTextField;
 
-public class TransferPanel extends RoundedPanel {
+public class TransferPanel extends RoundedPanel implements SelectedAccountListener {
     private Database db;
     private BankAccount selectedAccount;
 
@@ -26,7 +28,7 @@ public class TransferPanel extends RoundedPanel {
     private JTextField descriptionTextField;
     private JButton transferButton;
 
-    TransferPanel(Database db, BankAccount selectedAccount) {
+    public TransferPanel(Database db, BankAccount selectedAccount) {
         super(25);
 
         this.db = db;
@@ -93,7 +95,11 @@ public class TransferPanel extends RoundedPanel {
     public void addTransferActionListener(JButton button) {
         button.addActionListener((ActionEvent e) -> {
             if (e.getSource() == button) {
-                System.out.println("deposit button");
+                if (selectedAccount.getBalance() - Double.parseDouble(amountTextField.getText()) < 0) {
+                    JOptionPane.showMessageDialog(this, "Operation Fails!\n Insuficient funds", "Failure",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
                 String[] transferData = { descriptionTextField.getText(), selectedAccount.getId(),
                         recipientTextField.getText(),
                         amountTextField.getText(), "2024",
@@ -105,7 +111,14 @@ public class TransferPanel extends RoundedPanel {
                 selectedAccount.linkOperationId(d.getId());
                 selectedAccount.setBalance(-d.getAmount());
                 db.saveFiles();
+                JOptionPane.showMessageDialog(this, "Operation Successful!", "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
         });
+    }
+
+    @Override
+    public void onAccountChange(BankAccount selectedAccount) {
+        this.selectedAccount = selectedAccount;
     }
 }

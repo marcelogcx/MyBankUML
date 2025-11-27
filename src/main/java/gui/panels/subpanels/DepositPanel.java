@@ -1,4 +1,4 @@
-package gui.panels;
+package gui.panels.subpanels;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -6,17 +6,19 @@ import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import bank.BankAccount;
 import bank.Deposit;
 import core.Database;
+import core.SelectedAccountListener;
 import core.ThemeManager;
 import gui.components.RoundedButton;
 import gui.components.RoundedPanel;
 import gui.components.RoundedTextField;
 
-public class DepositPanel extends RoundedPanel {
+public class DepositPanel extends RoundedPanel implements SelectedAccountListener {
     private Database db;
     private BankAccount selectedAccount;
     private JLabel[] labels;
@@ -25,7 +27,7 @@ public class DepositPanel extends RoundedPanel {
     private JTextField descriptionTextField;
     private JButton depositButton;
 
-    DepositPanel(Database db, BankAccount selectedAccount) {
+    public DepositPanel(Database db, BankAccount selectedAccount) {
         super(25);
 
         this.db = db;
@@ -90,7 +92,14 @@ public class DepositPanel extends RoundedPanel {
                 selectedAccount.linkOperationId(d.getId());
                 selectedAccount.setBalance(d.getAmount());
                 db.saveFiles();
+                JOptionPane.showMessageDialog(this, "Operation Successful!", "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
         });
+    }
+
+    @Override
+    public void onAccountChange(BankAccount selectedAccount) {
+        this.selectedAccount = selectedAccount;
     }
 }
