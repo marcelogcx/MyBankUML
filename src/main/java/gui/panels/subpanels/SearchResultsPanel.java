@@ -212,15 +212,13 @@ public class SearchResultsPanel extends RoundedPanel {
             clickablePanels[i].addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    System.out.println("clicked");
-                    System.out.println("clicked");
 
                     UserType[] choices = UserType.values();
 
                     UserType selected = (UserType) JOptionPane.showInputDialog(
                             null, // Parent component (can be your JFrame)
                             "Select a User Type:", // Message
-                            "Create New User", // Title of the window
+                            "Change Permissions", // Title of the window
                             JOptionPane.QUESTION_MESSAGE, // Icon type
                             null, // Icon (null = use default)
                             choices, // The array of options

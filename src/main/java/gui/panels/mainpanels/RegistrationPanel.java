@@ -172,13 +172,26 @@ public class RegistrationPanel extends JPanel {
                         Teller tempTeller = (Teller) loggedUser;
                         Client c = tempTeller.register(UserType.CLIENT, userData[0], userData[1], userData[2],
                                 userData[3]);
+                        if (c == null) {
+                            JOptionPane.showMessageDialog(this, "Client not Created!\nUsername already exists",
+                                    "Failure",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            return;
+                        }
                         JOptionPane.showMessageDialog(this, "Client Created!", "Success",
                                 JOptionPane.INFORMATION_MESSAGE);
                         createUserListener.onUserCreation(c);
                     } else {
                         Admin tempAdmin = (Admin) loggedUser;
-                        tempAdmin.register(UserType.CLIENT, userData[0], userData[1], userData[2],
+                        User u = tempAdmin.register(UserType.CLIENT, userData[0], userData[1], userData[2],
                                 userData[3]);
+
+                        if (u == null) {
+                            JOptionPane.showMessageDialog(this, "Client not Created!\nUsername already exists",
+                                    "Failure",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            return;
+                        }
                         JOptionPane.showMessageDialog(this, "Client Created!", "Success",
                                 JOptionPane.INFORMATION_MESSAGE);
                         createUserListener.onUserCreation(tempAdmin);
@@ -187,8 +200,14 @@ public class RegistrationPanel extends JPanel {
                     break;
                 case TELLER:
                     Admin tempAdmin = (Admin) loggedUser;
-                    tempAdmin.register(UserType.TELLER, userData[0], userData[1], userData[2],
+                    User u = tempAdmin.register(UserType.TELLER, userData[0], userData[1], userData[2],
                             userData[3]);
+
+                    if (u == null) {
+                        JOptionPane.showMessageDialog(this, "Teller not Created!\nUsername already exists", "Failure",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        return;
+                    }
                     JOptionPane.showMessageDialog(this, "Teller Created!", "Success",
                             JOptionPane.INFORMATION_MESSAGE);
                     createUserListener.onUserCreation(tempAdmin);

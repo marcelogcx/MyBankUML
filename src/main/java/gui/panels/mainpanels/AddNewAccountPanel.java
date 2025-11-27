@@ -109,6 +109,9 @@ public class AddNewAccountPanel extends JPanel {
                 bankAccountData[0] = textFields[0].getText();
                 bankAccountData[1] = (String) accountTypeBox.getSelectedItem();
                 bankAccountData[2] = textFields[1].getText();
+                if (bankAccountData[2] == null || bankAccountData[2].isEmpty()) {
+                    bankAccountData[2] = "0.0";
+                }
                 BankAccount ba = db.writeRecord(BankAccount.class, bankAccountData);
                 c.linkBankAccount(ba.getId());
                 String[] operationData = { "Initial Deposit", ba.getId(), bankAccountData[2], "2024", "true" };
