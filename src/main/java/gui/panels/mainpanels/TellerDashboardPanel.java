@@ -17,6 +17,7 @@ import javax.swing.ScrollPaneConstants;
 import bank.Client;
 import bank.Teller;
 import bank.User;
+import core.CreateUserListener;
 import core.Database;
 import core.DeleteUserListener;
 import core.PanelEventListener;
@@ -26,7 +27,7 @@ import gui.components.RoundedButton;
 import gui.components.RoundedTextField;
 import gui.panels.subpanels.SearchResultsPanel;
 
-public class TellerDashboardPanel extends JPanel implements DeleteUserListener {
+public class TellerDashboardPanel extends JPanel implements DeleteUserListener, CreateUserListener {
     private PanelEventListener panelEventListener;
     private Database db;
     private Teller t;
@@ -190,6 +191,49 @@ public class TellerDashboardPanel extends JPanel implements DeleteUserListener {
         searchResultScroll.setBorder(BorderFactory.createEmptyBorder());
         searchResultPanel.addListener(this);
         add(searchResultScroll);
+        revalidate();
+        repaint();
+    }
+
+    @Override
+    public void onUserCreation(User user) {
+
+        // Search Bar
+        User[] clients = t.getClients(db);
+        remove(searchBar);
+        searchBar = new RoundedTextField(false);
+        searchBar.setPlaceholder("Search a client by id, full name, username, email");
+        searchBar.setBounds(10, 110, 600, 40);
+        ThemeManager.styleRoundedTextField(searchBar);
+        addSearchActionListener(searchBar);
+
+        remove(searchButton);
+        searchButton = new RoundedButton("");
+        searchButton.setIcon(SEARCH_ICON);
+        searchButton.setBounds(620, 110, 40, 40);
+        ThemeManager.styleButton(searchButton);
+        addSearchActionListener(searchButton);
+
+        remove(searchResultPanel);
+        remove(searchResultScroll);
+        searchResultPanel = new SearchResultsPanel(db, panelEventListener, t, clients);
+        int numClients = clients.length;
+        searchResultPanel.setPreferredSize(new Dimension(1040, 420));
+        if (numClients > 7) {
+            searchResultPanel.setPreferredSize(new Dimension(1040, 420 + (numClients - 7) * 40));
+        }
+        searchResultScroll = new JScrollPane(searchResultPanel);
+        searchResultScroll.setBounds(10, 160, 754, 420);
+        searchResultScroll.getHorizontalScrollBar().setUI(new ModernScrollBarUI());
+        searchResultScroll.getVerticalScrollBar().setUI(new ModernScrollBarUI());
+        searchResultScroll.getVerticalScrollBar().setUnitIncrement(20);
+        searchResultScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        searchResultScroll.setBorder(BorderFactory.createEmptyBorder());
+        searchResultPanel.addListener(this);
+
+        add(searchBar);
+        add(searchResultScroll);
+        add(searchButton);
         revalidate();
         repaint();
     }

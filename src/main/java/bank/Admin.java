@@ -37,6 +37,39 @@ public class Admin extends User {
         System.out.println("Admin " + getUsername() + " signed out successfully");
     }
 
+    public User register(UserType userType, String fullname, String email, String username,
+            String password) {
+        if (getDatabase() == null) {
+            System.err.println("Database not initialized");
+            return null;
+        }
+        if (getDatabase().usernameExists(username)) {
+            System.err.println("Username already exists");
+            return null;
+        }
+        String[] recordData = { fullname, email, username, password };
+        switch (userType) {
+            case CLIENT:
+                Client newClient = getDatabase().writeRecord(Client.class, recordData);
+                if (newClient != null) {
+                    System.out.println("Admin " + getUsername() + " registered new client: " + username);
+                }
+                getDatabase().saveFiles();
+                return newClient;
+            case TELLER:
+                Teller newTeller = getDatabase().writeRecord(Teller.class, recordData);
+                if (newTeller != null) {
+                    System.out.println("Admin " + getUsername() + " registered new teller: " + username);
+                }
+                getDatabase().saveFiles();
+                return newTeller;
+            default:
+                throw new IllegalArgumentException("Admin cannot create other admins");
+
+        }
+
+    }
+
     public boolean grantAccess(Database db, String userId, UserType newUserType) {
         if (db == null) {
             return false;

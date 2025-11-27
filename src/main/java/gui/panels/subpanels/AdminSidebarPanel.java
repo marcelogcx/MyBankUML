@@ -13,7 +13,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import bank.Admin;
-import bank.Teller;
 import core.Database;
 import core.PanelEventListener;
 import core.ThemeManager;
@@ -28,6 +27,9 @@ public class AdminSidebarPanel extends JPanel {
     private final ImageIcon SEARCH_ACCENT_ICON = new ImageIcon(getClass().getResource("/img/search-hover-icon.png"));
     private final ImageIcon PROFILE_ICON = new ImageIcon(getClass().getResource("/img/profile.png"));
     private final ImageIcon PROFILE_ACCENT_ICON = new ImageIcon(getClass().getResource("/img/profile-hover.png"));
+    private final ImageIcon NEW_ACCOUNT_ICON = new ImageIcon(getClass().getResource("/img/new-account-icon.png"));
+    private final ImageIcon NEW_ACCOUNT_ACCENT_ICON = new ImageIcon(
+            getClass().getResource("/img/new-account-hover.png"));
     private JButton[] buttons;
     private int selectedButtonIndex = 0;
 
@@ -38,10 +40,10 @@ public class AdminSidebarPanel extends JPanel {
         ThemeManager.styleMainPanel(this);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        String[] buttonNames = { "Search Clients", "Profile" };
-        ImageIcon[] buttonNormalIcons = { SEARCH_ICON, PROFILE_ICON };
-        ImageIcon[] buttonAccentIcons = { SEARCH_ACCENT_ICON, PROFILE_ACCENT_ICON };
-        String[] redirectionPanelNames = { "dashboard", "profile" };
+        String[] buttonNames = { "Search Clients", "Profile", "Add New User" };
+        ImageIcon[] buttonNormalIcons = { SEARCH_ICON, PROFILE_ICON, NEW_ACCOUNT_ICON };
+        ImageIcon[] buttonAccentIcons = { SEARCH_ACCENT_ICON, PROFILE_ACCENT_ICON, NEW_ACCOUNT_ACCENT_ICON };
+        String[] redirectionPanelNames = { "dashboard", "profile", "registration" };
         this.buttons = initiateButtons(buttonNames, buttonNormalIcons, buttonAccentIcons);
         setButtonBehavior(redirectionPanelNames, buttonNormalIcons, buttonAccentIcons);
 
@@ -107,6 +109,9 @@ public class AdminSidebarPanel extends JPanel {
                             panelEventListener.onShowEvent(redirectionalPanelNames[INDEX]);
                             break;
                         case "profile":
+                            panelEventListener.onShowEvent(redirectionalPanelNames[INDEX]);
+                            break;
+                        case "registration":
                             panelEventListener.onShowEvent(redirectionalPanelNames[INDEX]);
                             break;
                     }

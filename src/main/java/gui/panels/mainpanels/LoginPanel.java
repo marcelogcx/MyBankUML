@@ -40,7 +40,7 @@ public class LoginPanel extends JPanel {
 
         ThemeManager.styleMainPanel(this);
 
-        labels = new JLabel[5];
+        labels = new JLabel[3];
 
         // Title
         labels[0] = new JLabel("MyBankUML");
@@ -77,18 +77,6 @@ public class LoginPanel extends JPanel {
         loginButton.setBounds((500 - 300) / 2, 330, 300, 40);
         ThemeManager.styleButton(loginButton);
 
-        // New Here Label
-        labels[3] = new JLabel("New Here?");
-        labels[3].setBounds((500 - 85) / 2 - 60, 390, 85, 20);
-        ThemeManager.styleFieldHyperlinkLabel(labels[3]);
-
-        // Create Account Label
-        labels[4] = new JLabel("Create an Account");
-        labels[4].setBounds((500 - 145) / 2 + 60, 390, 145, 20);
-        ThemeManager.styleHyperlink(labels[4]);
-        labels[4].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        addRegistrationMouseListener(labels[4]); // Make the cursor to change (make it clear is clickable)
-
         // Add components to the panel
         for (JLabel label : labels) {
             add(label);
@@ -116,21 +104,11 @@ public class LoginPanel extends JPanel {
                 System.out.println("wrong password");
                 return;
             }
+            u.setDatabase(db);
             JPanel mainPanel = u.createMainPanel(db, panelEventListener);
             panelEventListener.onAddEvent("main", mainPanel, new Dimension(1024, 768));
         });
 
-    }
-
-    private void addRegistrationMouseListener(JLabel label) {
-        label.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                RegistrationPanel rp = new RegistrationPanel(db, panelEventListener);
-                panelEventListener.onAddEvent("registration", rp, new Dimension(750, 500));
-                resetTextFields();
-            }
-        });
     }
 
     public void resetTextFields() {

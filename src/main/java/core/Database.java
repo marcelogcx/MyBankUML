@@ -67,6 +67,35 @@ public class Database {
 
             if (iStreamUsers == null) {
                 System.err.println("Users JSON file not found.");
+                Map<String, Object> adminData = new java.util.HashMap<>();
+                adminData.put("id", "123");
+                adminData.put("userType", "ADMIN");
+                adminData.put("fullname", "main admin");
+                adminData.put("email", "admin@admin.com");
+                adminData.put("username", "admin");
+                adminData.put("password", "123");
+                adminData.put("isUserBlocked", false);
+
+                Map<String, Object> initialUsersMap = new java.util.HashMap<>();
+                initialUsersMap.put("123", adminData);
+
+                mapper.writerWithDefaultPrettyPrinter().writeValue(usersFile, initialUsersMap);
+
+                iStreamUsers = new FileInputStream(usersFile);
+                Map<String, User> tempUsers = mapper.readValue(iStreamUsers, new TypeReference<Map<String, User>>() {
+                });
+
+                for (Map.Entry<String, User> entry : tempUsers.entrySet()) {
+                    String id = entry.getKey();
+                    User u = entry.getValue();
+
+                    usedIds.add(id);
+                    usernames.put(u.getUsername(), id);
+
+                    users.put(id, u);
+                }
+
+                idGen = new IdGenerator(usedIds);
                 return;
             }
 
@@ -96,11 +125,6 @@ public class Database {
             bankAccounts = mapper.readValue(iStreamBankAccounts,
                     new TypeReference<Map<String, BankAccount>>() {
                     });
-            /*
-             * for (String bankAccountId : bankAccounts.keySet()) {
-             * usedIds.add(bankAccountId);
-             * }
-             */
 
             // Load Bank Operations
             InputStream iStreamBankOperations = bankOperationsFile.exists()

@@ -4,7 +4,9 @@ import core.Database;
 import core.PanelEventListener;
 
 import javax.swing.JPanel;
+import javax.xml.crypto.Data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -23,6 +25,9 @@ public abstract class User {
     private String password;
     private boolean isUserBlocked;
 
+    @JsonIgnore
+    private Database db;
+
     public User(String id, UserType userType, String fullname, String email, String username, String password,
             Boolean isUserBlocked) {
         this.id = id;
@@ -32,6 +37,11 @@ public abstract class User {
         this.username = username;
         this.password = password;
         this.isUserBlocked = isUserBlocked;
+    }
+
+    @JsonIgnore
+    public void setDatabase(Database db) {
+        this.db = db;
     }
 
     public void setId(String id) {
@@ -56,6 +66,10 @@ public abstract class User {
 
     public void setIsUserBlocked(boolean isUserBlocked) {
         this.isUserBlocked = isUserBlocked;
+    }
+
+    public Database getDatabase() {
+        return db;
     }
 
     public boolean getIsUserBlocked() {

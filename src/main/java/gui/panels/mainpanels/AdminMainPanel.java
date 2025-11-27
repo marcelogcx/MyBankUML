@@ -36,7 +36,7 @@ public class AdminMainPanel extends JPanel {
         sidebar = new AdminSidebarPanel(db, pManager, a);
         sidebar.setBounds(0, 100, 250, 668);
 
-        JPanel dashboardPanel = new AdminDashboardPanel(db, pManager, a);
+        AdminDashboardPanel dashboardPanel = new AdminDashboardPanel(db, pManager, a);
 
         JScrollPane dashboardScroll = new JScrollPane(dashboardPanel);
         dashboardScroll.getVerticalScrollBar().setUI(new ModernScrollBarUI());
@@ -47,9 +47,12 @@ public class AdminMainPanel extends JPanel {
         dashboardPanel.setPreferredSize(new Dimension(774, 650));
 
         TellerProfilePanel profilePanel = new TellerProfilePanel(a);
+        RegistrationPanel registrationPanel = new RegistrationPanel(panelEventListener, a);
+        registrationPanel.setCreateUserListener(dashboardPanel);
 
         pManager.addPanel("dashboard", dashboardScroll);
         pManager.addPanel("profile", profilePanel);
+        pManager.addPanel("registration", registrationPanel);
 
         pManager.showPanel("dashboard");
 

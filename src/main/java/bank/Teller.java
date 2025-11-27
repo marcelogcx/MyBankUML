@@ -42,21 +42,22 @@ public class Teller extends User {
      * @param password Client's password
      * @return Created Client object or null if failed
      */
-    public Client register(Database db, UserType userType, String fullname, String email, String username,
+    public Client register(UserType userType, String fullname, String email, String username,
             String password) {
-        if (db == null) {
+        if (getDatabase() == null) {
             System.err.println("Database not initialized");
             return null;
         }
-        if (db.usernameExists(username)) {
+        if (getDatabase().usernameExists(username)) {
             System.err.println("Username already exists");
             return null;
         }
         String[] recordData = { fullname, email, username, password };
-        Client newClient = db.writeRecord(Client.class, recordData);
+        Client newClient = getDatabase().writeRecord(Client.class, recordData);
         if (newClient != null) {
             System.out.println("Teller " + getUsername() + " registered new client: " + username);
         }
+        getDatabase().saveFiles();
         return newClient;
     }
 
@@ -73,12 +74,12 @@ public class Teller extends User {
      * @param clientId ID of the client to view
      * @return Client object or null if not found
      */
-    public Client viewClient(Database db, String clientId) {
-        if (db == null) {
+    public Client viewClient(String clientId) {
+        if (getDatabase() == null) {
             System.err.println("Database not provided");
             return null;
         }
-        Client client = db.readRecord(Client.class, clientId);
+        Client client = getDatabase().readRecord(Client.class, clientId);
         if (client != null) {
             System.out.println("Teller " + getUsername() + " viewing client: " + client.getUsername());
         } else {

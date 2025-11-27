@@ -33,7 +33,7 @@ public class TellerMainPanel extends JPanel {
         header.setBounds(0, 0, 1024, 100);
         sidebar = new TellerSidebarPanel(db, pManager, t);
         sidebar.setBounds(0, 100, 250, 668);
-        JPanel dashboardPanel = new TellerDashboardPanel(db, pManager, t);
+        TellerDashboardPanel dashboardPanel = new TellerDashboardPanel(db, pManager, t);
 
         JScrollPane dashboardScroll = new JScrollPane(dashboardPanel);
         dashboardScroll.getVerticalScrollBar().setUI(new ModernScrollBarUI());
@@ -44,9 +44,12 @@ public class TellerMainPanel extends JPanel {
         dashboardPanel.setPreferredSize(new Dimension(774, 650));
 
         TellerProfilePanel profilePanel = new TellerProfilePanel(t);
+        RegistrationPanel registrationPanel = new RegistrationPanel(panelEventListener, t);
+        registrationPanel.setCreateUserListener(dashboardPanel);
 
         pManager.addPanel("dashboard", dashboardScroll);
         pManager.addPanel("profile", profilePanel);
+        pManager.addPanel("registration", registrationPanel);
 
         pManager.showPanel("dashboard");
 
