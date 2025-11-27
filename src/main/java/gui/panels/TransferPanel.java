@@ -100,10 +100,10 @@ public class TransferPanel extends RoundedPanel {
                         "true" };
                 Transfer d = db.writeRecord(Transfer.class, transferData);
                 BankAccount recipient = db.readRecord(BankAccount.class, recipientTextField.getText());
-                recipient.setBalance(d.getAmount());
+                recipient.adjustBalance(d.getAmount());
                 recipient.linkOperationId(d.getId());
                 selectedAccount.linkOperationId(d.getId());
-                selectedAccount.setBalance(-d.getAmount());
+                selectedAccount.adjustBalance(-d.getAmount());
                 db.saveFiles();
             }
         });

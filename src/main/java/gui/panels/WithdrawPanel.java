@@ -88,7 +88,7 @@ public class WithdrawPanel extends RoundedPanel {
                         "true" };
                 Withdrawal d = db.writeRecord(Withdrawal.class, depositData);
                 selectedAccount.linkOperationId(d.getId());
-                selectedAccount.setBalance(-d.getAmount());
+                selectedAccount.adjustBalance(-d.getAmount());
                 db.saveFiles();
             }
         });

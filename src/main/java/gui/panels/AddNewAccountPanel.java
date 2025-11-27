@@ -63,7 +63,7 @@ public class AddNewAccountPanel extends JPanel {
         ThemeManager.styleFieldLabel(labels[3]);
 
         // Account Type Combo Box
-        String[] accountTypeValues = { "CHECKING", "SAVING", "BUSINESS" };
+        String[] accountTypeValues = { "CHECKING", "SAVINGS" };
         accountTypeBox = new RoundedComboBox<>(accountTypeValues);
         accountTypeBox.setBounds(10, 240, 345, 40);
         ThemeManager.styleRoundedComboBox(accountTypeBox);

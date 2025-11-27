@@ -155,18 +155,7 @@ public class ProfilePanel extends JPanel {
         ThemeManager.styleProfileValue(labels[17]);
         labels[17].setBounds(35, 270, 300, 25);
 
-        // Total Portfolio Label
-        labels[18] = new JLabel("Total Portfolio Value");
-        labels[18].setIcon(ACCOUNT_DISTRIBUTION_ICON);
-        ThemeManager.styleProfileLabel(labels[18]);
-        labels[18].setBounds(10, 315, 300, 25);
-
-        // Total Portfolio Value
-        labels[19] = new JLabel("$4,500.00");
-        ThemeManager.styleProfileValue(labels[19]);
-        labels[19].setBounds(35, 350, 300, 25);
-
-        for (int i = 11; i < 20; i++) {
+        for (int i = 11; i < 18; i++) {
             membershipDetailsPanel.add(labels[i]);
         }
         add(membershipDetailsPanel);
