@@ -13,7 +13,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import bank.Admin;
 import bank.Client;
+import bank.Teller;
+import bank.UserType;
 import core.*;
 import gui.components.RoundedButton;
 import gui.components.RoundedTextField;
@@ -102,17 +105,39 @@ public class LoginPanel extends JPanel {
                 password = passwordTextField.getText();
             }
             if (!db.usernameExists(username)) {
-                System.out.println("User does not exists");
+                System.out.println("User does not exist");
                 return;
             }
             String userId = db.getIdFromUsername(username);
             Client c = db.readRecord(Client.class, userId);
             if (!c.getPassword().equals(password)) {
-                System.out.println("wrong password");
+                System.out.println("Wrong password");
                 return;
             }
-            MainPanel mp = new MainPanel(db, listener, c);
-            listener.onEvent("main", mp, new Dimension(1024, 768));
+
+            // Route to appropriate panel based on user type
+            UserType userType = c.getUserType();
+
+            if (userType == UserType.ADMIN) {
+                Admin admin = db.getAdmin(userId);
+                if (admin != null) {
+                    System.out.println("Admin login successful: " + username);
+                    AdminPanel ap = new AdminPanel(db, listener, admin);
+                    listener.onEvent("admin", ap, new Dimension(1024, 768));
+                }
+            } else if (userType == UserType.TELLER) {
+                Teller teller = db.getTeller(userId);
+                if (teller != null) {
+                    System.out.println("Teller login successful: " + username);
+                    TellerPanel tp = new TellerPanel(db, listener, teller);
+                    listener.onEvent("teller", tp, new Dimension(1024, 768));
+                }
+            } else {
+                // Default to client panel
+                System.out.println("Client login successful: " + username);
+                MainPanel mp = new MainPanel(db, listener, c);
+                listener.onEvent("main", mp, new Dimension(1024, 768));
+            }
         });
 
     }

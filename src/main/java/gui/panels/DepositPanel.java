@@ -88,7 +88,7 @@ public class DepositPanel extends RoundedPanel {
                         "true" };
                 Deposit d = db.writeRecord(Deposit.class, depositData);
                 selectedAccount.linkOperationId(d.getId());
-                selectedAccount.setBalance(d.getAmount());
+                selectedAccount.adjustBalance(d.getAmount());
                 db.saveFiles();
             }
         });

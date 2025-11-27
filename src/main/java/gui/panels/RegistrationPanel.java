@@ -11,8 +11,10 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import bank.BankAccount;
+import bank.BankAccountType;
 import bank.Client;
 import bank.Deposit;
+import bank.UserType;
 import core.Database;
 import core.PanelEventListener;
 import core.ThemeManager;
@@ -84,14 +86,14 @@ public class RegistrationPanel extends JPanel {
         textFields[2].setBounds(20, 240, 345, 40);
         ThemeManager.styleRoundedTextField(textFields[2]);
 
-        // Account Type Label
-        labels[4] = new JLabel("Account Type");
+        // User Type Label
+        labels[4] = new JLabel("User Type");
         labels[4].setBounds(385, 200, 200, 50);
         ThemeManager.styleFieldLabel(labels[4]);
 
-        // Account Type Combo Box
-        String[] accountTypeValues = { "CHECKING", "SAVING", "BUSINESS" };
-        accountTypeBox = new RoundedComboBox<>(accountTypeValues);
+        // User Type Combo Box
+        String[] userTypeValues = { "CLIENT", "TELLER", "ADMIN" };
+        accountTypeBox = new RoundedComboBox<>(userTypeValues);
         accountTypeBox.setBounds(385, 240, 345, 40);
         ThemeManager.styleRoundedComboBox(accountTypeBox);
 
@@ -153,20 +155,39 @@ public class RegistrationPanel extends JPanel {
             clientData[1] = textFields[1].getText();
             clientData[2] = textFields[2].getText();
             clientData[3] = textFields[3].getText();
-            String accountType = (String) accountTypeBox.getSelectedItem();
-            accountData[0] = "Initial " + accountType.substring(0, 1).toUpperCase()
-                    + accountType.substring(1).toLowerCase();
-            accountData[1] = (String) accountTypeBox.getSelectedItem();
+
+            // Get selected user type
+            String selectedUserType = (String) accountTypeBox.getSelectedItem();
+            UserType userType = UserType.valueOf(selectedUserType);
+
+            // Create user with specified type
+            Client c = db.writeUser(userType, clientData);
+
+            // Create bank account (default to CHECKING type)
+            accountData[0] = "Primary Account";
+            accountData[1] = "CHECKING";  // BankAccountType
             accountData[2] = textFields[4].getText();
             BankAccount ba = db.writeRecord(BankAccount.class, accountData);
-            Client c = db.writeRecord(Client.class, clientData);
+
+            // Create initial deposit
             String[] operationData = { "Initial Deposit", ba.getId(), accountData[2], "2024", "true" };
             Deposit initialDeposit = db.writeRecord(Deposit.class, operationData);
+
             c.linkBankAccount(ba.getId());
             ba.linkOperationId(initialDeposit.getId());
             db.saveFiles();
-            MainPanel mp = new MainPanel(db, listener, c);
-            listener.onEvent("main", mp, new Dimension(1024, 768));
+
+            // Route to appropriate panel based on user type
+            if (userType == UserType.ADMIN) {
+                AdminPanel ap = new AdminPanel(db, listener, db.getAdmin(c.getId()));
+                listener.onEvent("admin", ap, new Dimension(1024, 768));
+            } else if (userType == UserType.TELLER) {
+                TellerPanel tp = new TellerPanel(db, listener, db.getTeller(c.getId()));
+                listener.onEvent("teller", tp, new Dimension(1024, 768));
+            } else {
+                MainPanel mp = new MainPanel(db, listener, c);
+                listener.onEvent("main", mp, new Dimension(1024, 768));
+            }
         });
     }
 
