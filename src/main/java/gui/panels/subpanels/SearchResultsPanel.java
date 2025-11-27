@@ -33,17 +33,17 @@ import gui.panels.mainpanels.ClientDashboardPanel;
 public class SearchResultsPanel extends RoundedPanel {
     private DeleteUserListener deleteUserListener;
     private User[] users;
-    private UserType loggedUserType;
+    private User loggedUser;
     private JLabel[] labels;
     private JSeparator[] separators;
     private JPanel[] clickablePanels;
     private Database db;
 
-    public SearchResultsPanel(Database db, PanelEventListener panelEventListener, UserType loggedUserType,
+    public SearchResultsPanel(Database db, PanelEventListener panelEventListener, User loggedUser,
             User[] users) {
         super(25);
         this.users = users;
-        this.loggedUserType = loggedUserType;
+        this.loggedUser = loggedUser;
         this.db = db;
 
         ThemeManager.styleSecondaryPanel(this);
@@ -89,7 +89,7 @@ public class SearchResultsPanel extends RoundedPanel {
         labels[7].setBounds(880, 70, 150, 40);
         ThemeManager.styleProfileValue(labels[7]);
 
-        if (loggedUserType == UserType.TELLER) {
+        if (loggedUser.getUserType() == UserType.TELLER) {
             listTellerResults(panelEventListener);
         } else {
             listAdminResults(panelEventListener);
@@ -204,10 +204,10 @@ public class SearchResultsPanel extends RoundedPanel {
 
             separators[i] = new JSeparator(SwingConstants.HORIZONTAL);
             separators[i].setForeground(new Color(107, 124, 147, 95));
-            separators[i].setBounds(20, 110 + (i * 40), 834, 1);
+            separators[i].setBounds(20, 110 + (i * 40), 994, 1);
 
             clickablePanels[i] = new JPanel();
-            clickablePanels[i].setBounds(20, 110 + (i * 40), 834, 40);
+            clickablePanels[i].setBounds(20, 110 + (i * 40), 994, 40);
             clickablePanels[i].setLayout(null);
             clickablePanels[i].addMouseListener(new MouseAdapter() {
                 @Override
@@ -237,23 +237,11 @@ public class SearchResultsPanel extends RoundedPanel {
                                 JOptionPane.INFORMATION_MESSAGE);
                         return;
                     }
-                    switch (selected) {
-                        case CLIENT:
-                            db.deleteRecord(User.class, users[INDEX].getId());
-                            users[INDEX] = db.writeRecord(Client.class, new String[] { users[INDEX].getFullname(),
-                                    users[INDEX].getEmail(), users[INDEX].getUsername(), users[INDEX].getPassword() });
-                            break;
-                        case TELLER:
-                            db.deleteRecord(User.class, users[INDEX].getId());
-                            users[INDEX] = db.writeRecord(Teller.class, new String[] { users[INDEX].getFullname(),
-                                    users[INDEX].getEmail(), users[INDEX].getUsername(), users[INDEX].getPassword() });
-                            break;
-                        case ADMIN:
-                            db.deleteRecord(User.class, users[INDEX].getId());
-                            users[INDEX] = db.writeRecord(Admin.class, new String[] { users[INDEX].getFullname(),
-                                    users[INDEX].getEmail(), users[INDEX].getUsername(), users[INDEX].getPassword() });
-                            break;
-                    }
+                    Admin tempAdmin = (Admin) loggedUser;
+                    tempAdmin.grantAccess(db, users[INDEX].getId(), selected);
+                    String id = db.getIdFromUsername(users[INDEX].getUsername());
+                    User tempUser = db.readRecord(User.class, id);
+                    users[INDEX] = tempUser;
                     db.saveFiles();
                     deleteUserListener.onUserDeletion(users);
                 }
@@ -261,8 +249,10 @@ public class SearchResultsPanel extends RoundedPanel {
             JPopupMenu popupMenu = new JPopupMenu();
             JMenuItem deleteItem = new JMenuItem("Delete");
             JMenuItem blockItem = new JMenuItem("Block");
+            if (users[i].getIsUserBlocked() == true) {
+                blockItem.setText("Unblock");
+            }
             deleteItem.addActionListener(e -> {
-                System.out.println("Delete logic goes here...");
                 db.deleteRecord(User.class, users[INDEX].getId());
                 db.saveFiles();
                 users[INDEX] = null;
@@ -270,45 +260,58 @@ public class SearchResultsPanel extends RoundedPanel {
                 deleteUserListener.onUserDeletion(tempUsers);
             });
             blockItem.addActionListener(e -> {
-                System.out.println("Block logic goes here...");
+                users[INDEX].setIsUserBlocked(!users[INDEX].getIsUserBlocked());
+                deleteUserListener.onUserDeletion(users);
             });
             popupMenu.add(deleteItem);
             popupMenu.add(blockItem);
             clickablePanels[i].setComponentPopupMenu(popupMenu);
 
-            labels[7 + i * 6] = new JLabel(users[i].getId());
-            labels[7 + i * 6].setBounds(0, 0, 100, 40);
-            clickablePanels[i].add(labels[7 + i * 6]);
+            labels[8 + i * 7] = new JLabel(users[i].getId());
+            labels[8 + i * 7].setBounds(0, 0, 100, 40);
+            clickablePanels[i].add(labels[8 + i * 7]);
 
-            labels[8 + i * 6] = new JLabel(users[i].getFullname());
-            labels[8 + i * 6].setBounds(110, 0, 100, 40);
-            clickablePanels[i].add(labels[8 + i * 6]);
+            labels[9 + i * 7] = new JLabel(users[i].getFullname());
+            labels[9 + i * 7].setBounds(110, 0, 100, 40);
+            clickablePanels[i].add(labels[9 + i * 7]);
 
-            labels[9 + i * 6] = new JLabel(users[i].getUsername());
-            labels[9 + i * 6].setBounds(260, 0, 100, 40);
-            clickablePanels[i].add(labels[9 + i * 6]);
+            labels[10 + i * 7] = new JLabel(users[i].getUsername());
+            labels[10 + i * 7].setBounds(260, 0, 100, 40);
+            clickablePanels[i].add(labels[10 + i * 7]);
 
-            labels[10 + i * 6] = new JLabel(users[i].getEmail());
-            labels[10 + i * 6].setBounds(430, 0, 170, 40);
-            clickablePanels[i].add(labels[10 + i * 6]);
+            labels[11 + i * 7] = new JLabel(users[i].getEmail());
+            labels[11 + i * 7].setBounds(430, 0, 170, 40);
+            clickablePanels[i].add(labels[11 + i * 7]);
 
-            labels[11 + i * 6] = new JLabel(users[i].getUserType().toString());
-            labels[11 + i * 6].setBounds(600, 0, 170, 40);
-            clickablePanels[i].add(labels[11 + i * 6]);
+            labels[12 + i * 7] = new JLabel(users[i].getUserType().toString());
+            labels[12 + i * 7].setBounds(600, 0, 170, 40);
+            clickablePanels[i].add(labels[12 + i * 7]);
+
+            if (users[i].getIsUserBlocked() == true) {
+                labels[13 + i * 7] = new RoundedLabel("BLOCKED", 15);
+                labels[13 + i * 7].setBackground(Color.RED);
+                labels[13 + i * 7].setForeground(Color.WHITE);
+            } else {
+                labels[13 + i * 7] = new RoundedLabel("ACTIVE", 15);
+                labels[13 + i * 7].setBackground(new Color(15, 76, 129));
+                labels[13 + i * 7].setForeground(Color.WHITE);
+            }
+            labels[13 + i * 7].setBounds(740, 5, 80, 30);
+            clickablePanels[i].add(labels[13 + i * 7]);
 
             if (users[i] instanceof Client) {
                 Client c = (Client) users[i];
                 if (c.getBankAccountIds() != null) {
-                    labels[12 + i * 6] = new JLabel(Integer.toString(c.getBankAccountIds().size()));
+                    labels[14 + i * 7] = new JLabel(Integer.toString(c.getBankAccountIds().size()));
                 } else {
-                    labels[12 + i * 6] = new JLabel("0");
+                    labels[14 + i * 7] = new JLabel("0");
                 }
             } else {
-                labels[12 + i * 6] = new JLabel("0");
+                labels[14 + i * 7] = new JLabel("0");
             }
 
-            labels[12 + i * 6].setBounds(780, 0, 100, 40);
-            clickablePanels[i].add(labels[12 + i * 6]);
+            labels[14 + i * 7].setBounds(920, 0, 100, 40);
+            clickablePanels[i].add(labels[14 + i * 7]);
         }
     }
 

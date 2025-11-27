@@ -2,6 +2,7 @@ package core;
 
 import java.io.*;
 import java.net.URISyntaxException;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -242,7 +243,6 @@ public class Database {
         return users.values().stream()
                 .filter(user -> user.getUserType() == UserType.CLIENT || user.getUserType() == UserType.TELLER)
                 .toArray(User[]::new);
-
     }
 
     public void saveFiles() {
@@ -282,6 +282,127 @@ public class Database {
         } catch (IOException e) {
             System.err.println("Failed to save files: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Closes files safely
+     * Note: Since we're using ObjectMapper which handles file streams
+     * automatically,
+     * this method performs cleanup operations on the data structures
+     */
+    public void closeFiles() {
+        System.out.println("Closing database and cleaning up resources...");
+        // Save any pending changes before closing
+        saveFiles();
+
+        // Clear data structures if needed (optional)
+        // users.clear();
+        // bankAccounts.clear();
+        // bankOperations.clear();
+
+        System.out.println("Database closed successfully.");
+    }
+
+    /**
+     * Updates an existing record in the database
+     * 
+     * @param c          Class type of the record
+     * @param id         ID of the record to update
+     * @param recordData Updated data for the record
+     * @return Updated record or null if not found
+     */
+    public <T> T updateRecord(Class<T> c, String id, String[] recordData) {
+        if (c == User.class) {
+            User tempClient = users.get(id);
+            if (tempClient == null) {
+                System.err.println("Client not found for update: " + id);
+                return null;
+            }
+
+            // Remove old username mapping
+            usernames.remove(tempClient.getUsername());
+
+            // Create updated client (keeping existing bank accounts and user type)
+            tempClient.setFullname(recordData[0]);
+            tempClient.setEmail(recordData[1]);
+            tempClient.setUsername(recordData[2]);
+            tempClient.setPassword(recordData[3]);
+
+            usernames.put(tempClient.getUsername(), id);
+            System.out.println("Client updated: " + id);
+            return c.cast(tempClient);
+
+        } else if (c == BankAccount.class) {
+            BankAccount tempBankAccount = bankAccounts.get(id);
+            if (tempBankAccount == null) {
+                System.err.println("Bank account not found for update: " + id);
+                return null;
+            }
+
+            tempBankAccount.setAccountName(recordData[0]);
+            tempBankAccount.setAccountType(BankAccountType.valueOf(recordData[1]));
+            tempBankAccount.setBalance(Double.valueOf(recordData[2]));
+
+            bankAccounts.put(id, tempBankAccount);
+            System.out.println("Bank account updated: " + id);
+            return c.cast(tempBankAccount);
+
+        } else {
+            throw new IllegalArgumentException("Update not supported for type: " + c);
+        }
+    }
+
+    /**
+     * Creates backup copies of all data files
+     * 
+     * @return true if backup successful, false otherwise
+     */
+    public boolean backupDataFiles() {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            File jarFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI());
+            File baseDir = jarFile.isFile() ? jarFile.getParentFile() : jarFile;
+
+            // Create backup folder
+            File backupDir = new File(baseDir, "data/backup");
+            if (!backupDir.exists()) {
+                boolean created = backupDir.mkdirs();
+                if (!created) {
+                    System.err.println("Failed to create backup directory");
+                    return false;
+                }
+            }
+
+            // Create timestamp for backup files
+            String timestamp = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")
+                    .format(java.time.LocalDateTime.now());
+
+            // Backup users file
+            File usersBackup = new File(backupDir, "user_backup_" + timestamp + ".json");
+            if (users != null) {
+                mapper.writerWithDefaultPrettyPrinter().writeValue(usersBackup, users);
+            }
+
+            // Backup bank accounts file
+            File accountsBackup = new File(backupDir, "bankAccount_backup_" + timestamp + ".json");
+            if (bankAccounts != null) {
+                mapper.writerWithDefaultPrettyPrinter().writeValue(accountsBackup, bankAccounts);
+            }
+
+            // Backup bank operations file
+            File operationsBackup = new File(backupDir, "bankOperation_backup_" + timestamp + ".json");
+            if (bankOperations != null) {
+                mapper.writerWithDefaultPrettyPrinter().writeValue(operationsBackup, bankOperations);
+            }
+
+            System.out.println("Backup created successfully at: " + backupDir.getAbsolutePath());
+            return true;
+
+        } catch (IOException | URISyntaxException e) {
+            System.err.println("Failed to create backup: " + e.getMessage());
+            e.printStackTrace();
+            return false;
         }
     }
 

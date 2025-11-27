@@ -1,11 +1,7 @@
 package gui.panels.mainpanels;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +14,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
-import bank.BankAccount;
 import bank.Client;
 import bank.Teller;
 import bank.User;
@@ -75,7 +70,7 @@ public class TellerDashboardPanel extends JPanel implements DeleteUserListener {
         ThemeManager.styleButton(searchButton);
         addSearchActionListener(searchButton);
 
-        searchResultPanel = new SearchResultsPanel(db, panelEventListener, t.getUserType(), clients);
+        searchResultPanel = new SearchResultsPanel(db, panelEventListener, t, clients);
         int numClients = clients.length;
         searchResultPanel.setPreferredSize(new Dimension(1040, 420));
         if (numClients > 7) {
@@ -105,7 +100,7 @@ public class TellerDashboardPanel extends JPanel implements DeleteUserListener {
                 users = filterResults(t.getClients(db), searchBar.getText());
                 remove(searchResultScroll);
 
-                searchResultPanel = new SearchResultsPanel(db, panelEventListener, t.getUserType(), users);
+                searchResultPanel = new SearchResultsPanel(db, panelEventListener, t, users);
                 searchResultPanel.setPreferredSize(new Dimension(1040, 420));
                 if (users.length > 7) {
                     searchResultPanel.setPreferredSize(new Dimension(1040, 420 + (users.length - 7) * 40));
@@ -132,7 +127,7 @@ public class TellerDashboardPanel extends JPanel implements DeleteUserListener {
                 users = filterResults(t.getClients(db), searchBar.getText());
                 remove(searchResultScroll);
 
-                searchResultPanel = new SearchResultsPanel(db, panelEventListener, t.getUserType(), users);
+                searchResultPanel = new SearchResultsPanel(db, panelEventListener, t, users);
                 searchResultPanel.setPreferredSize(new Dimension(1040, 420));
                 if (users.length > 7) {
                     searchResultPanel.setPreferredSize(new Dimension(1040, 420 + (users.length - 7) * 40));
@@ -181,7 +176,7 @@ public class TellerDashboardPanel extends JPanel implements DeleteUserListener {
     @Override
     public void onUserDeletion(User[] users) {
         remove(searchResultScroll);
-        searchResultPanel = new SearchResultsPanel(db, panelEventListener, t.getUserType(), users);
+        searchResultPanel = new SearchResultsPanel(db, panelEventListener, t, users);
         searchResultPanel.setPreferredSize(new Dimension(1040, 420));
         if (users.length > 7) {
             searchResultPanel.setPreferredSize(new Dimension(1040, 420 + (users.length - 7) * 40));

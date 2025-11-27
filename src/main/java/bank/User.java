@@ -1,13 +1,12 @@
 package bank;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
 import core.Database;
 import core.PanelEventListener;
 
 import javax.swing.JPanel;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "userType", visible = true)
 @JsonSubTypes({
@@ -39,8 +38,28 @@ public abstract class User {
         this.id = id;
     }
 
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public void setIsUserBlocked(boolean isUserBlocked) {
         this.isUserBlocked = isUserBlocked;
+    }
+
+    public boolean getIsUserBlocked() {
+        return isUserBlocked;
     }
 
     public String getId() {
@@ -67,9 +86,8 @@ public abstract class User {
         return email;
     }
 
-    public boolean getIsUserBlocked() {
-        return isUserBlocked;
-    }
-
     public abstract JPanel createMainPanel(Database db, PanelEventListener panelEventListener);
+
+    @Override
+    public abstract String toString();
 }

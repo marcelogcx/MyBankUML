@@ -13,7 +13,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import bank.Admin;
 import bank.Client;
+import bank.Teller;
+import bank.UserType;
 import core.*;
 import gui.components.RoundedButton;
 import gui.components.RoundedTextField;
@@ -104,7 +107,7 @@ public class LoginPanel extends JPanel {
                 password = passwordTextField.getText();
             }
             if (!db.usernameExists(username)) {
-                System.out.println("User does not exists");
+                System.out.println("User does not exist");
                 return;
             }
             String userId = db.getIdFromUsername(username);

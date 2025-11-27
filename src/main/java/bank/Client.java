@@ -6,6 +6,7 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import core.ClientListener;
@@ -16,6 +17,9 @@ import gui.panels.mainpanels.ClientMainPanel;
 public class Client extends User {
     private List<ClientListener> listeners = new ArrayList<>();
     private List<String> bankAccountIds;
+
+    @JsonIgnore
+    private Database db;
 
     @JsonCreator
     public Client(@JsonProperty("id") String id, @JsonProperty("userType") UserType userType,
@@ -41,6 +45,70 @@ public class Client extends User {
 
     public List<String> getBankAccountIds() {
         return bankAccountIds;
+    }
+
+    /**
+     * Logs out of client account
+     */
+    public void signout() {
+        System.out.println("Client " + getUsername() + " signed out successfully");
+    }
+
+    /**
+     * Makes a transaction (transfer) from a bank account owned by this client
+     * 
+     * @param fromAccountId Client's bank account ID
+     * @param toAccountId   Recipient's bank account ID
+     * @param amount        Amount to transfer
+     * @param description   Description of the transaction
+     * @return Transfer object if successful, null otherwise
+     */
+    public Transfer makeTransaction(Database db, String fromAccountId, String toAccountId, double amount,
+            String description) {
+        if (db == null) {
+            System.err.println("Database not initialized for transaction");
+            return null;
+        }
+
+        if (!bankAccountIds.contains(fromAccountId)) {
+            System.err.println("Account " + fromAccountId + " does not belong to this client");
+            return null;
+        }
+
+        BankAccount account = db.readRecord(BankAccount.class, fromAccountId);
+        if (account == null) {
+            System.err.println("Bank account not found");
+            return null;
+        }
+        return account.makeTransaction(db, toAccountId, amount, description);
+    }
+
+    /**
+     * Makes a withdrawal from a bank account owned by this client
+     * 
+     * @param accountId   Client's bank account ID
+     * @param amount      Amount to withdraw
+     * @param description Description of the withdrawal
+     * @return Withdrawal object if successful, null otherwise
+     */
+    public Withdrawal makeWithdrawal(String accountId, double amount, String description) {
+        if (db == null) {
+            System.err.println("Database not initialized for withdrawal");
+            return null;
+        }
+
+        if (!bankAccountIds.contains(accountId)) {
+            System.err.println("Account " + accountId + " does not belong to this client");
+            return null;
+        }
+
+        BankAccount account = db.readRecord(BankAccount.class, accountId);
+        if (account == null) {
+            System.err.println("Bank account not found");
+            return null;
+        }
+
+        return account.makeWithdrawal(db, amount, description);
     }
 
     @Override

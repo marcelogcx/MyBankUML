@@ -15,7 +15,7 @@
 .mtj.tmp/
 
 # Package Files #
-!libs/*.jar
+*.jar
 *.war
 *.nar
 *.ear
@@ -50,3 +50,7 @@ buildNumber.properties
 
 .vscode
 data/
+.devcontainer
+
+# IntelliJ IDEA
+.idea/

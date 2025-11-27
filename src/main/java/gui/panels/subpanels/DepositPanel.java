@@ -90,7 +90,7 @@ public class DepositPanel extends RoundedPanel implements SelectedAccountListene
                         "true" };
                 Deposit d = db.writeRecord(Deposit.class, depositData);
                 selectedAccount.linkOperationId(d.getId());
-                selectedAccount.setBalance(d.getAmount());
+                selectedAccount.adjustBalance(d.getAmount());
                 db.saveFiles();
                 JOptionPane.showMessageDialog(this, "Operation Successful!", "Success",
                         JOptionPane.INFORMATION_MESSAGE);

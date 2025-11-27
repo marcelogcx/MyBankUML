@@ -17,7 +17,6 @@ public class BankAccountPanel extends RoundedPanel {
     private JLabel[] labels;
     private final ImageIcon CHECKING_ICON = new ImageIcon(getClass().getResource("/img/checking-icon.png"));
     private final ImageIcon SAVING_ICON = new ImageIcon(getClass().getResource("/img/saving-icon.png"));
-    private final ImageIcon BUSINESS_ICON = new ImageIcon(getClass().getResource("/img/business-icon.png"));
 
     public BankAccountPanel(BankAccount b) {
         super(25);
@@ -53,12 +52,8 @@ public class BankAccountPanel extends RoundedPanel {
                 labels[4].setIcon(CHECKING_ICON);
                 break;
             }
-            case SAVING -> {
+            case SAVINGS -> {
                 labels[4].setIcon(SAVING_ICON);
-                break;
-            }
-            case BUSINESS -> {
-                labels[4].setIcon(BUSINESS_ICON);
                 break;
             }
         }

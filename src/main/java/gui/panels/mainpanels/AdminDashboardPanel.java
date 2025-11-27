@@ -76,11 +76,11 @@ public class AdminDashboardPanel extends JPanel implements DeleteUserListener {
         ThemeManager.styleButton(searchButton);
         addSearchActionListener(searchButton);
 
-        searchResultPanel = new SearchResultsPanel(db, panelEventListener, a.getUserType(), users);
+        searchResultPanel = new SearchResultsPanel(db, panelEventListener, a, users);
         int numUsers = users.length;
-        searchResultPanel.setPreferredSize(new Dimension(900, 420));
+        searchResultPanel.setPreferredSize(new Dimension(1040, 420));
         if (numUsers > 7) {
-            searchResultPanel.setPreferredSize(new Dimension(900, 420 + (numUsers - 7) * 40));
+            searchResultPanel.setPreferredSize(new Dimension(1040, 420 + (numUsers - 7) * 40));
         }
         searchResultScroll = new JScrollPane(searchResultPanel);
         searchResultScroll.setBounds(10, 160, 754, 420);
@@ -106,10 +106,10 @@ public class AdminDashboardPanel extends JPanel implements DeleteUserListener {
                 users = filterResults(a.getUsers(db), searchBar.getText());
                 remove(searchResultScroll);
 
-                searchResultPanel = new SearchResultsPanel(db, panelEventListener, a.getUserType(), users);
-                searchResultPanel.setPreferredSize(new Dimension(900, 420));
+                searchResultPanel = new SearchResultsPanel(db, panelEventListener, a, users);
+                searchResultPanel.setPreferredSize(new Dimension(1040, 420));
                 if (users.length > 7) {
-                    searchResultPanel.setPreferredSize(new Dimension(900, 420 + (users.length - 7) * 40));
+                    searchResultPanel.setPreferredSize(new Dimension(1040, 420 + (users.length - 7) * 40));
                 }
                 searchResultScroll = new JScrollPane(searchResultPanel);
                 searchResultScroll.setBounds(10, 160, 754, 420);
@@ -133,10 +133,10 @@ public class AdminDashboardPanel extends JPanel implements DeleteUserListener {
                 users = filterResults(a.getUsers(db), searchBar.getText());
                 remove(searchResultScroll);
 
-                searchResultPanel = new SearchResultsPanel(db, panelEventListener, a.getUserType(), users);
-                searchResultPanel.setPreferredSize(new Dimension(900, 420));
+                searchResultPanel = new SearchResultsPanel(db, panelEventListener, a, users);
+                searchResultPanel.setPreferredSize(new Dimension(1040, 420));
                 if (users.length > 7) {
-                    searchResultPanel.setPreferredSize(new Dimension(900, 420 + (users.length - 7) * 40));
+                    searchResultPanel.setPreferredSize(new Dimension(1040, 420 + (users.length - 7) * 40));
                 }
                 searchResultScroll = new JScrollPane(searchResultPanel);
                 searchResultScroll.setBounds(10, 160, 754, 420);
@@ -182,10 +182,10 @@ public class AdminDashboardPanel extends JPanel implements DeleteUserListener {
     @Override
     public void onUserDeletion(User[] users) {
         remove(searchResultScroll);
-        searchResultPanel = new SearchResultsPanel(db, panelEventListener, a.getUserType(), users);
-        searchResultPanel.setPreferredSize(new Dimension(900, 420));
+        searchResultPanel = new SearchResultsPanel(db, panelEventListener, a, users);
+        searchResultPanel.setPreferredSize(new Dimension(1040, 420));
         if (users.length > 7) {
-            searchResultPanel.setPreferredSize(new Dimension(900, 420 + (users.length - 7) * 40));
+            searchResultPanel.setPreferredSize(new Dimension(1040, 420 + (users.length - 7) * 40));
         }
         searchResultScroll = new JScrollPane(searchResultPanel);
         searchResultScroll.setBounds(10, 160, 754, 420);

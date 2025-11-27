@@ -95,7 +95,7 @@ public class WithdrawPanel extends RoundedPanel implements SelectedAccountListen
                         "true" };
                 Withdrawal d = db.writeRecord(Withdrawal.class, depositData);
                 selectedAccount.linkOperationId(d.getId());
-                selectedAccount.setBalance(-d.getAmount());
+                selectedAccount.adjustBalance(-d.getAmount());
                 db.saveFiles();
                 JOptionPane.showMessageDialog(this, "Operation Successful!", "Success",
                         JOptionPane.INFORMATION_MESSAGE);

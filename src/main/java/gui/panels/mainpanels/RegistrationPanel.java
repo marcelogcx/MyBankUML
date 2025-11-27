@@ -12,6 +12,7 @@ import javax.swing.SwingConstants;
 
 import bank.Admin;
 import bank.BankAccount;
+import bank.BankAccountType;
 import bank.Client;
 import bank.Deposit;
 import bank.Teller;
