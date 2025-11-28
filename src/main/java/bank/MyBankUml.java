@@ -1,8 +1,12 @@
 package bank;
 
 import java.awt.CardLayout;
-import javax.swing.*;
-import core.*;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import core.Database;
+import core.PanelManager;
 import gui.panels.mainpanels.LoginPanel;
 
 public class MyBankUml {
@@ -27,6 +31,7 @@ public class MyBankUml {
         mainFrame.add(currentPanel);
         mainFrame.setVisible(true);
         mainFrame.setLocationRelativeTo(null);
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
 }

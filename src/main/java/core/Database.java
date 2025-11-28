@@ -170,7 +170,20 @@ public class Database {
             usernames.put(tempAdmin.getUsername(), id);
             return c.cast(tempAdmin);
         } else if (c == BankAccount.class) {
-            String id = idGen.generateBankAccountId();
+            String id;
+            switch (BankAccountType.valueOf(recordData[1])) {
+                case CHECKING:
+                    id = idGen.generateCheckingAccountId();
+                    break;
+                case SAVINGS:
+                    id = idGen.generateSavingAccountId();
+                    break;
+                case BUSINESS:
+                    id = idGen.generateBusinessAccountId();
+                    break;
+                default:
+                    id = idGen.generateCheckingAccountId();
+            }
             BankAccount bankAccountTemp = new BankAccount(id, recordData[0], BankAccountType.valueOf(recordData[1]),
                     Double.valueOf(recordData[2]), new ArrayList<String>());
             bankAccounts.put(id, bankAccountTemp);

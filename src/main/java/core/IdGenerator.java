@@ -17,9 +17,21 @@ public class IdGenerator {
         return id;
     }
 
-    public String generateBankAccountId() {
+    public String generateCheckingAccountId() {
         long number = Math.abs(random.nextLong()) % 100_000L;
         String id = String.format("%s%05d", "CHK", number);
+        return id;
+    }
+
+    public String generateSavingAccountId() {
+        long number = Math.abs(random.nextLong()) % 100_000L;
+        String id = String.format("%s%05d", "SVN", number);
+        return id;
+    }
+
+    public String generateBusinessAccountId() {
+        long number = Math.abs(random.nextLong()) % 100_000L;
+        String id = String.format("%s%05d", "BSN", number);
         return id;
     }
 

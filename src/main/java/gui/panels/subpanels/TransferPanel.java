@@ -101,12 +101,19 @@ public class TransferPanel extends RoundedPanel implements SelectedAccountListen
                 Transfer tempWith = this.client.makeTransaction(selectedAccountId, recipientTextField.getText(),
                         Double.parseDouble(amountTextField.getText()),
                         descriptionTextField.getText());
+                if (selectedAccountId.equals(recipientTextField.getText())) {
+                    JOptionPane.showMessageDialog(null,
+                            "Operation failed!\nCannot transfer to same account", "Failure",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
                 if (tempWith == null) {
                     JOptionPane.showMessageDialog(null,
                             "Operation failed!\nInsuficient Funds or Recipient ID does not exists", "Failure",
                             JOptionPane.INFORMATION_MESSAGE);
                     return;
                 }
+
                 JOptionPane.showMessageDialog(this, "Operation Successful!", "Success",
                         JOptionPane.INFORMATION_MESSAGE);
             }
