@@ -1,7 +1,7 @@
 package gui.panels.mainpanels;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -9,8 +9,8 @@ import javax.swing.JPanel;
 
 import bank.BankAccount;
 import bank.Client;
-import bank.Deposit;
 import core.AddNewAccountListener;
+import core.ClientListener;
 import core.Database;
 import core.PanelEventListener;
 import core.ThemeManager;
@@ -109,18 +109,20 @@ public class AddNewAccountPanel extends JPanel {
                 String[] bankAccountData = new String[3];
                 bankAccountData[0] = textFields[0].getText();
                 bankAccountData[1] = (String) accountTypeBox.getSelectedItem();
-                bankAccountData[2] = textFields[1].getText();
-                if (bankAccountData[2] == null || bankAccountData[2].isEmpty()) {
-                    bankAccountData[2] = "0.0";
-                }
+                bankAccountData[2] = "0.0";
                 BankAccount ba = db.writeRecord(BankAccount.class, bankAccountData);
                 c.linkBankAccount(ba.getId());
                 ba.setDatabase(db);
-                ba.makeDeposit(Double.parseDouble(bankAccountData[2]), "Initial Deposit");
+                if (textFields[1].getText() != null && !textFields[1].getText().isEmpty()) {
+                    bankAccountData[2] = textFields[1].getText();
+                }
+                c.makeDeposit(ba.getId(), Double.parseDouble(bankAccountData[2]), "Initial Deposit");
+                c.notifyListener();
 
                 listener.onShowEvent("dashboard");
             }
 
         });
     }
+
 }

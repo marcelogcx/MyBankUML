@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import bank.BankAccount;
@@ -38,7 +39,6 @@ public class TransactionsPanel extends JPanel implements ClientListener {
     private PanelManager pManager;
 
     private BankAccount selectedAccount;
-    private JLabel noAccounts;
 
     public TransactionsPanel(Database db, Client c) {
         ThemeManager.styleMainPanel(this);
@@ -65,13 +65,12 @@ public class TransactionsPanel extends JPanel implements ClientListener {
         if (bankAccounts.size() == 0) {
             add(labels[0]);
             add(labels[1]);
-            noAccounts = new JLabel("You don't have bank accounts to make transactions");
-            noAccounts.setBounds(10, 100, 500, 40);
-            add(noAccounts);
+
             return;
         }
         selectedAccount = bankAccounts.get(0);
         selectedAccount.setDatabase(db);
+        System.out.println(selectedAccount.getBalance());
         balancePanel = new CurrentBalancePanel(selectedAccount);
         balancePanel.setBounds(10, 150, 744, 200);
 
@@ -134,8 +133,6 @@ public class TransactionsPanel extends JPanel implements ClientListener {
         if (bankAccounts.size() > 1) {
             remove(balancePanel);
             remove(selectAccountBox);
-        } else {
-            remove(noAccounts);
         }
         selectedAccount = bankAccounts.get(0);
         selectedAccount.setDatabase(db);

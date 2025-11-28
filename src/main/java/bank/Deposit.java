@@ -24,6 +24,7 @@ public class Deposit extends BankOperation {
 
     /**
      * Sets the database instance for this deposit
+     * 
      * @param db Database instance
      */
     public void setDatabase(Database db) {
@@ -31,14 +32,16 @@ public class Deposit extends BankOperation {
     }
 
     /**
-     * Checks if the deposit can be made according to sufficient balance and bank policy.
+     * Checks if the deposit can be made according to sufficient balance and bank
+     * policy.
      * Validates that the deposit amount is positive and complies with bank policy.
+     * 
      * @return true if valid, false otherwise
      */
     @JsonIgnore
     @Override
     public boolean isValidOperation() {
-        if (getAmount() <= 0) {
+        if (getAmount() < 0) {
             System.err.println("Deposit amount must be positive");
             return false;
         }

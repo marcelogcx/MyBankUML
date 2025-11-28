@@ -120,6 +120,9 @@ public class BankAccount {
             if (transfer.isValidOperation()) {
                 transfer.executeOperation();
                 transfer.record();
+                for (BankAccountListener bal : listeners) {
+                    bal.onOperation(balance);
+                }
                 return transfer;
             } else {
                 transfer.cancel();
@@ -153,6 +156,9 @@ public class BankAccount {
             if (withdrawal.isValidOperation()) {
                 withdrawal.executeOperation();
                 withdrawal.record();
+                for (BankAccountListener bal : listeners) {
+                    bal.onOperation(balance);
+                }
                 return withdrawal;
             } else {
                 withdrawal.cancel();
@@ -186,6 +192,9 @@ public class BankAccount {
             if (deposit.isValidOperation()) {
                 deposit.executeOperation();
                 deposit.record();
+                for (BankAccountListener bal : listeners) {
+                    bal.onOperation(balance);
+                }
                 return deposit;
             } else {
                 deposit.cancel();

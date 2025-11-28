@@ -43,9 +43,7 @@ public class Client extends User {
 
     public void linkBankAccount(String bankAccountId) {
         this.bankAccountIds.add(bankAccountId);
-        for (ClientListener cl : listeners) {
-            cl.onAdditionBankAccount(bankAccountIds, getId());
-        }
+
     }
 
     public List<String> getBankAccountIds() {
@@ -86,6 +84,9 @@ public class Client extends User {
             return null;
         }
         account.setDatabase(db);
+        for (ClientListener cl : listeners) {
+            cl.onAdditionBankAccount(bankAccountIds, getId());
+        }
         return account.makeTransaction(toAccountId, amount, description);
     }
 
@@ -114,6 +115,9 @@ public class Client extends User {
             return null;
         }
         account.setDatabase(db);
+        for (ClientListener cl : listeners) {
+            cl.onAdditionBankAccount(bankAccountIds, getId());
+        }
         return account.makeWithdrawal(amount, description);
     }
 
@@ -134,7 +138,14 @@ public class Client extends User {
             return null;
         }
         account.setDatabase(db);
+
         return account.makeDeposit(amount, description);
+    }
+
+    public void notifyListener() {
+        for (ClientListener cl : listeners) {
+            cl.onAdditionBankAccount(bankAccountIds, getId());
+        }
     }
 
     @Override

@@ -9,12 +9,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
 import bank.User;
@@ -28,6 +31,7 @@ import core.Database;
 import core.DeleteUserListener;
 import core.PanelEventListener;
 import core.ThemeManager;
+import gui.components.ModernScrollBarUI;
 import gui.components.RoundedLabel;
 import gui.components.RoundedPanel;
 import gui.panels.mainpanels.ClientDashboardPanel;
@@ -127,9 +131,24 @@ public class SearchResultsPanel extends RoundedPanel implements ClientListener {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     ClientDashboardPanel cdp = new ClientDashboardPanel(db, panelEventListener, c);
+                    c.setDatabase(db);
                     cdp.setTitleDescription(c.getFullname() + " - " + c.getUsername(),
                             "Here's an overview of the client's accounts");
-                    panelEventListener.onAddEvent("clientBankAccounts", cdp, new Dimension(0, 0));
+                    JScrollPane dashboardScroll = new JScrollPane(cdp);
+                    dashboardScroll.getVerticalScrollBar().setUI(new ModernScrollBarUI());
+                    dashboardScroll.getVerticalScrollBar().setUnitIncrement(20);
+                    dashboardScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+                    dashboardScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+                    dashboardScroll.setBorder(BorderFactory.createEmptyBorder());
+                    int numBankAccounts = c.getBankAccountIds().size();
+                    if (numBankAccounts < 3) {
+                        cdp.setPreferredSize(new Dimension(774, 650));
+                    } else {
+                        cdp.setPreferredSize(
+                                new Dimension(774, 800 + 322 * ((int) Math.ceil(numBankAccounts / 2.f) - 2)));
+                    }
+                    c.addClientListener(cdp);
+                    panelEventListener.onAddEvent("clientBankAccounts", dashboardScroll, new Dimension(0, 0));
                 }
             });
             JPopupMenu popupMenu = new JPopupMenu();
@@ -149,6 +168,7 @@ public class SearchResultsPanel extends RoundedPanel implements ClientListener {
             blockItem.addActionListener(e -> {
                 users[INDEX].setIsUserBlocked(!users[INDEX].getIsUserBlocked());
                 deleteUserListener.onUserDeletion(users);
+                db.saveFiles();
             });
             popupMenu.add(deleteItem);
             popupMenu.add(blockItem);
@@ -175,15 +195,15 @@ public class SearchResultsPanel extends RoundedPanel implements ClientListener {
             clickablePanels[i].add(labels[12 + i * 7]);
 
             if (users[i].getIsUserBlocked() == true) {
-                labels[13 + i * 7] = new RoundedLabel("BLOCKED", 15);
+                labels[13 + i * 7] = new RoundedLabel("Blocked", 15);
                 labels[13 + i * 7].setBackground(Color.RED);
                 labels[13 + i * 7].setForeground(Color.WHITE);
             } else {
-                labels[13 + i * 7] = new RoundedLabel("ACTIVE", 15);
+                labels[13 + i * 7] = new RoundedLabel("Active", 15);
                 labels[13 + i * 7].setBackground(new Color(15, 76, 129));
                 labels[13 + i * 7].setForeground(Color.WHITE);
             }
-            labels[13 + i * 7].setBounds(740, 5, 80, 30);
+            labels[13 + i * 7].setBounds(740, 5, 65, 30);
             clickablePanels[i].add(labels[13 + i * 7]);
 
             if (c.getBankAccountIds() != null) {
@@ -263,6 +283,7 @@ public class SearchResultsPanel extends RoundedPanel implements ClientListener {
             blockItem.addActionListener(e -> {
                 users[INDEX].setIsUserBlocked(!users[INDEX].getIsUserBlocked());
                 deleteUserListener.onUserDeletion(users);
+                db.saveFiles();
             });
             popupMenu.add(deleteItem);
             popupMenu.add(blockItem);
@@ -289,15 +310,15 @@ public class SearchResultsPanel extends RoundedPanel implements ClientListener {
             clickablePanels[i].add(labels[12 + i * 7]);
 
             if (users[i].getIsUserBlocked() == true) {
-                labels[13 + i * 7] = new RoundedLabel("BLOCKED", 15);
+                labels[13 + i * 7] = new RoundedLabel("Blocked", 15);
                 labels[13 + i * 7].setBackground(Color.RED);
                 labels[13 + i * 7].setForeground(Color.WHITE);
             } else {
-                labels[13 + i * 7] = new RoundedLabel("ACTIVE", 15);
+                labels[13 + i * 7] = new RoundedLabel("Active", 15);
                 labels[13 + i * 7].setBackground(new Color(15, 76, 129));
                 labels[13 + i * 7].setForeground(Color.WHITE);
             }
-            labels[13 + i * 7].setBounds(740, 5, 80, 30);
+            labels[13 + i * 7].setBounds(740, 5, 65, 30);
             clickablePanels[i].add(labels[13 + i * 7]);
 
             if (users[i] instanceof Client) {

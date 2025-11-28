@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 
 import bank.BankAccount;
 import bank.Client;
+import core.ClientListener;
 import core.Database;
 import core.PanelManager;
 import core.ThemeManager;
@@ -53,7 +54,7 @@ public class AccountTransactionsPanel extends JPanel {
                     JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        BankAccount selectedAccount = bankAccounts.get(0);
+        BankAccount selectedAccount = db.readRecord(BankAccount.class, selectedAccountId);
         balancePanel = new CurrentBalancePanel(selectedAccount);
         balancePanel.setBounds(10, 100, 744, 200);
 
@@ -89,4 +90,5 @@ public class AccountTransactionsPanel extends JPanel {
     public void removeListener(SelectedAccountListener sal) {
         listeners.remove(sal);
     }
+
 }

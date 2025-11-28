@@ -136,6 +136,7 @@ public class ClientDashboardPanel extends JPanel implements ClientListener {
         } else {
             setPreferredSize(new Dimension(774, 800 + 322 * ((int) Math.ceil(numBankAccounts / 2.f) - 2)));
         }
+        revalidate();
         repaint();
     }
 
