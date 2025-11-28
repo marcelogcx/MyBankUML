@@ -121,7 +121,7 @@ public class Teller extends User {
             return null;
         }
 
-        Withdrawal withdrawal = account.makeWithdrawal(db, amount, description);
+        Withdrawal withdrawal = account.makeWithdrawal(amount, description);
         if (withdrawal != null) {
             System.out.println("Teller " + getUsername() + " processed withdrawal for client " + client.getUsername());
         }
@@ -160,7 +160,7 @@ public class Teller extends User {
             return null;
         }
 
-        Deposit deposit = account.makeDeposit(db, amount, description);
+        Deposit deposit = account.makeDeposit(amount, description);
         if (deposit != null) {
             System.out.println("Teller " + getUsername() + " processed deposit for client " + client.getUsername());
         }
@@ -202,7 +202,7 @@ public class Teller extends User {
             return null;
         }
 
-        Transfer transfer = account.makeTransaction(db, toAccountId, amount, description);
+        Transfer transfer = account.makeTransaction(toAccountId, amount, description);
         if (transfer != null) {
             System.out.println("Teller " + getUsername() + " processed transfer for client " + client.getUsername());
         }

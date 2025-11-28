@@ -46,6 +46,7 @@ public class TransactionsPanel extends JPanel implements ClientListener {
         this.db = db;
         this.c = c;
         c.addClientListener(this);
+        c.setDatabase(db);
 
         listeners = new ArrayList<>();
         labels = new JLabel[2];
@@ -70,6 +71,7 @@ public class TransactionsPanel extends JPanel implements ClientListener {
             return;
         }
         selectedAccount = bankAccounts.get(0);
+        selectedAccount.setDatabase(db);
         balancePanel = new CurrentBalancePanel(selectedAccount);
         balancePanel.setBounds(10, 150, 744, 200);
 
@@ -85,7 +87,7 @@ public class TransactionsPanel extends JPanel implements ClientListener {
             this.selectedAccount = (BankAccount) selectAccountBox.getSelectedItem();
             balancePanel.setSelectedAccount(selectedAccount);
             for (SelectedAccountListener sal : listeners) {
-                sal.onAccountChange(selectedAccount);
+                sal.onAccountChange(selectedAccount.getId());
             }
         });
 
@@ -93,9 +95,9 @@ public class TransactionsPanel extends JPanel implements ClientListener {
         pManager = new PanelManager(null, currentPanel);
         currentPanel.setBounds(10, 410, 744, 350);
         currentPanel.setOpaque(false);
-        DepositPanel dp = new DepositPanel(db, selectedAccount);
-        WithdrawPanel wp = new WithdrawPanel(db, selectedAccount);
-        TransferPanel tp = new TransferPanel(db, selectedAccount);
+        DepositPanel dp = new DepositPanel(db, c, selectedAccount.getId());
+        WithdrawPanel wp = new WithdrawPanel(db, c, selectedAccount.getId());
+        TransferPanel tp = new TransferPanel(db, c, selectedAccount.getId());
         pManager.addPanel("deposit", dp);
         pManager.addPanel("withdraw", wp);
         pManager.addPanel("transfer", tp);
@@ -136,6 +138,7 @@ public class TransactionsPanel extends JPanel implements ClientListener {
             remove(noAccounts);
         }
         selectedAccount = bankAccounts.get(0);
+        selectedAccount.setDatabase(db);
         balancePanel = new CurrentBalancePanel(selectedAccount);
         balancePanel.setBounds(10, 150, 744, 200);
 
@@ -150,16 +153,16 @@ public class TransactionsPanel extends JPanel implements ClientListener {
             this.selectedAccount = (BankAccount) selectAccountBox.getSelectedItem();
             balancePanel.setSelectedAccount(selectedAccount);
             for (SelectedAccountListener sal : listeners) {
-                sal.onAccountChange(selectedAccount);
+                sal.onAccountChange(selectedAccount.getId());
             }
         });
         currentPanel = new JPanel(new CardLayout());
         pManager = new PanelManager(null, currentPanel);
         currentPanel.setBounds(10, 410, 744, 350);
         currentPanel.setOpaque(false);
-        DepositPanel dp = new DepositPanel(db, selectedAccount);
-        WithdrawPanel wp = new WithdrawPanel(db, selectedAccount);
-        TransferPanel tp = new TransferPanel(db, selectedAccount);
+        DepositPanel dp = new DepositPanel(db, c, selectedAccount.getId());
+        WithdrawPanel wp = new WithdrawPanel(db, c, selectedAccount.getId());
+        TransferPanel tp = new TransferPanel(db, c, selectedAccount.getId());
         pManager.addPanel("deposit", dp);
         pManager.addPanel("withdraw", wp);
         pManager.addPanel("transfer", tp);

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
+import javax.xml.crypto.Data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -30,6 +31,10 @@ public class Client extends User {
             @JsonProperty("isUserBlocked") boolean isUserBlocked) {
         super(id, userType, fullname, email, username, password, isUserBlocked);
         this.bankAccountIds = bankAccountIds;
+    }
+
+    public void setDatabase(Database db) {
+        this.db = db;
     }
 
     public void addClientListener(ClientListener cl) {
@@ -63,10 +68,10 @@ public class Client extends User {
      * @param description   Description of the transaction
      * @return Transfer object if successful, null otherwise
      */
-    public Transfer makeTransaction(Database db, String fromAccountId, String toAccountId, double amount,
+    public Transfer makeTransaction(String fromAccountId, String toAccountId, double amount,
             String description) {
         if (db == null) {
-            System.err.println("Database not initialized for transaction");
+            System.err.println("Database not initialized");
             return null;
         }
 
@@ -80,7 +85,8 @@ public class Client extends User {
             System.err.println("Bank account not found");
             return null;
         }
-        return account.makeTransaction(db, toAccountId, amount, description);
+        account.setDatabase(db);
+        return account.makeTransaction(toAccountId, amount, description);
     }
 
     /**
@@ -93,7 +99,7 @@ public class Client extends User {
      */
     public Withdrawal makeWithdrawal(String accountId, double amount, String description) {
         if (db == null) {
-            System.err.println("Database not initialized for withdrawal");
+            System.err.println("Database not initialized");
             return null;
         }
 
@@ -107,8 +113,28 @@ public class Client extends User {
             System.err.println("Bank account not found");
             return null;
         }
+        account.setDatabase(db);
+        return account.makeWithdrawal(amount, description);
+    }
 
-        return account.makeWithdrawal(db, amount, description);
+    public Deposit makeDeposit(String accountId, double amount, String description) {
+        if (db == null) {
+            System.err.println("Database not initialized");
+            return null;
+        }
+
+        if (!bankAccountIds.contains(accountId)) {
+            System.err.println("Account " + accountId + " does not belong to this client");
+            return null;
+        }
+
+        BankAccount account = db.readRecord(BankAccount.class, accountId);
+        if (account == null) {
+            System.err.println("Bank account not found");
+            return null;
+        }
+        account.setDatabase(db);
+        return account.makeDeposit(amount, description);
     }
 
     @Override

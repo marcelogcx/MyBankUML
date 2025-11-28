@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import bank.BankAccount;
+import bank.Client;
 import bank.Transfer;
 import core.Database;
 import core.SelectedAccountListener;
@@ -19,7 +20,8 @@ import gui.components.RoundedTextField;
 
 public class TransferPanel extends RoundedPanel implements SelectedAccountListener {
     private Database db;
-    private BankAccount selectedAccount;
+    private String selectedAccountId;
+    private Client client;
 
     private JLabel[] labels;
     private final ImageIcon TRANSFER_ICON = new ImageIcon(getClass().getResource("/img/transfer-icon.png"));
@@ -28,11 +30,12 @@ public class TransferPanel extends RoundedPanel implements SelectedAccountListen
     private JTextField descriptionTextField;
     private JButton transferButton;
 
-    public TransferPanel(Database db, BankAccount selectedAccount) {
+    public TransferPanel(Database db, Client client, String selectedAccountId) {
         super(25);
 
         this.db = db;
-        this.selectedAccount = selectedAccount;
+        this.client = client;
+        this.selectedAccountId = selectedAccountId;
 
         ThemeManager.styleSecondaryPanel(this);
 
@@ -50,7 +53,7 @@ public class TransferPanel extends RoundedPanel implements SelectedAccountListen
         ThemeManager.styleProfileLabel(labels[1]);
 
         // Recipient Account Label
-        labels[2] = new JLabel("Recipient Account");
+        labels[2] = new JLabel("Recipient Account ID");
         labels[2].setBounds(20, 95, 200, 40);
         ThemeManager.styleOperationLabel(labels[2]);
 
@@ -95,22 +98,15 @@ public class TransferPanel extends RoundedPanel implements SelectedAccountListen
     public void addTransferActionListener(JButton button) {
         button.addActionListener((ActionEvent e) -> {
             if (e.getSource() == button) {
-                if (selectedAccount.getBalance() - Double.parseDouble(amountTextField.getText()) < 0) {
-                    JOptionPane.showMessageDialog(this, "Operation Fails!\n Insuficient funds", "Failure",
+                Transfer tempWith = this.client.makeTransaction(selectedAccountId, recipientTextField.getText(),
+                        Double.parseDouble(amountTextField.getText()),
+                        descriptionTextField.getText());
+                if (tempWith == null) {
+                    JOptionPane.showMessageDialog(null,
+                            "Operation failed!\nInsuficient Funds or Recipient ID does not exists", "Failure",
                             JOptionPane.INFORMATION_MESSAGE);
                     return;
                 }
-                String[] transferData = { descriptionTextField.getText(), selectedAccount.getId(),
-                        recipientTextField.getText(),
-                        amountTextField.getText(), "2024",
-                        "true" };
-                Transfer d = db.writeRecord(Transfer.class, transferData);
-                BankAccount recipient = db.readRecord(BankAccount.class, recipientTextField.getText());
-                recipient.adjustBalance(d.getAmount());
-                recipient.linkOperationId(d.getId());
-                selectedAccount.linkOperationId(d.getId());
-                selectedAccount.adjustBalance(-d.getAmount());
-                db.saveFiles();
                 JOptionPane.showMessageDialog(this, "Operation Successful!", "Success",
                         JOptionPane.INFORMATION_MESSAGE);
             }
@@ -118,7 +114,7 @@ public class TransferPanel extends RoundedPanel implements SelectedAccountListen
     }
 
     @Override
-    public void onAccountChange(BankAccount selectedAccount) {
-        this.selectedAccount = selectedAccount;
+    public void onAccountChange(String selectedAccountId) {
+        this.selectedAccountId = selectedAccountId;
     }
 }

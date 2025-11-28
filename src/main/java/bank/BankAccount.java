@@ -3,6 +3,8 @@ package bank;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.crypto.Data;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import core.BankAccountListener;
@@ -17,6 +19,9 @@ public class BankAccount {
     private double balance;
     private ArrayList<String> operationIds;
 
+    @JsonIgnore
+    private Database db;
+
     public BankAccount(@JsonProperty("id") String id, @JsonProperty("accountName") String accountName,
             @JsonProperty("accountType") BankAccountType bankAccountType, @JsonProperty("balance") double balance,
             @JsonProperty("operationIds") ArrayList<String> operationIds) {
@@ -25,6 +30,11 @@ public class BankAccount {
         this.bankAccountType = bankAccountType;
         this.balance = balance;
         this.operationIds = operationIds;
+    }
+
+    @JsonIgnore
+    public void setDatabase(Database db) {
+        this.db = db;
     }
 
     public void addListener(BankAccountListener bal) {
@@ -93,7 +103,7 @@ public class BankAccount {
      * @param description        Description of the transaction
      * @return Transfer object if successful, null otherwise
      */
-    public Transfer makeTransaction(Database db, String recipientAccountId, double amount, String description) {
+    public Transfer makeTransaction(String recipientAccountId, double amount, String description) {
         if (db == null) {
             System.err.println("Database not initialized for transaction");
             return null;
@@ -101,7 +111,7 @@ public class BankAccount {
 
         String[] recordData = { description, this.id, recipientAccountId,
                 String.valueOf(amount),
-                java.time.LocalDateTime.now().toString(),
+                java.time.LocalDateTime.now().toLocalDate().toString(),
                 "false" };
         Transfer transfer = db.writeRecord(Transfer.class, recordData);
 
@@ -126,7 +136,7 @@ public class BankAccount {
      * @param description Description of the withdrawal
      * @return Withdrawal object if successful, null otherwise
      */
-    public Withdrawal makeWithdrawal(Database db, double amount, String description) {
+    public Withdrawal makeWithdrawal(double amount, String description) {
         if (db == null) {
             System.err.println("Database not initialized for withdrawal");
             return null;
@@ -134,7 +144,7 @@ public class BankAccount {
 
         String[] recordData = { description, this.id,
                 String.valueOf(amount),
-                java.time.LocalDateTime.now().toString(),
+                java.time.LocalDateTime.now().toLocalDate().toString(),
                 "false" };
         Withdrawal withdrawal = db.writeRecord(Withdrawal.class, recordData);
 
@@ -159,7 +169,7 @@ public class BankAccount {
      * @param description Description of the deposit
      * @return Deposit object if successful, null otherwise
      */
-    public Deposit makeDeposit(Database db, double amount, String description) {
+    public Deposit makeDeposit(double amount, String description) {
         if (db == null) {
             System.err.println("Database not initialized for deposit");
             return null;
@@ -167,8 +177,8 @@ public class BankAccount {
 
         String[] recordData = { description, this.id,
                 String.valueOf(amount),
-                java.time.LocalDateTime.now().toString(),
-                "false" };
+                java.time.LocalDateTime.now().toLocalDate().toString(),
+                "true" };
         Deposit deposit = db.writeRecord(Deposit.class, recordData);
 
         if (deposit != null) {

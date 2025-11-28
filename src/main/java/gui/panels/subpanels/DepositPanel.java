@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import bank.BankAccount;
+import bank.Client;
 import bank.Deposit;
 import core.Database;
 import core.SelectedAccountListener;
@@ -20,18 +21,20 @@ import gui.components.RoundedTextField;
 
 public class DepositPanel extends RoundedPanel implements SelectedAccountListener {
     private Database db;
-    private BankAccount selectedAccount;
+    private Client client;
+    private String selectedAccountId;
     private JLabel[] labels;
     private final ImageIcon DEPOSIT_ICON = new ImageIcon(getClass().getResource("/img/deposit-icon.png"));
     private JTextField amountTextField;
     private JTextField descriptionTextField;
     private JButton depositButton;
 
-    public DepositPanel(Database db, BankAccount selectedAccount) {
+    public DepositPanel(Database db, Client client, String selectedAccountId) {
         super(25);
 
         this.db = db;
-        this.selectedAccount = selectedAccount;
+        this.client = client;
+        this.selectedAccountId = selectedAccountId;
 
         ThemeManager.styleSecondaryPanel(this);
 
@@ -84,22 +87,16 @@ public class DepositPanel extends RoundedPanel implements SelectedAccountListene
     private void addDepositActionListener(JButton button) {
         button.addActionListener((ActionEvent e) -> {
             if (e.getSource() == button) {
-                System.out.println("deposit button");
-                String[] depositData = { descriptionTextField.getText(), selectedAccount.getId(),
-                        amountTextField.getText(), "2024",
-                        "true" };
-                Deposit d = db.writeRecord(Deposit.class, depositData);
-                selectedAccount.linkOperationId(d.getId());
-                selectedAccount.adjustBalance(d.getAmount());
-                db.saveFiles();
-                JOptionPane.showMessageDialog(this, "Operation Successful!", "Success",
+                this.client.makeDeposit(selectedAccountId, Double.parseDouble(amountTextField.getText()),
+                        descriptionTextField.getText());
+                JOptionPane.showMessageDialog(null, "Operation Successful!", "Success",
                         JOptionPane.INFORMATION_MESSAGE);
             }
         });
     }
 
     @Override
-    public void onAccountChange(BankAccount selectedAccount) {
-        this.selectedAccount = selectedAccount;
+    public void onAccountChange(String selectedAccountId) {
+        this.selectedAccountId = selectedAccountId;
     }
 }

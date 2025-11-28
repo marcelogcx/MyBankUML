@@ -115,10 +115,8 @@ public class AddNewAccountPanel extends JPanel {
                 }
                 BankAccount ba = db.writeRecord(BankAccount.class, bankAccountData);
                 c.linkBankAccount(ba.getId());
-                String[] operationData = { "Initial Deposit", ba.getId(), bankAccountData[2], "2024", "true" };
-                Deposit initialDeposit = db.writeRecord(Deposit.class, operationData);
-                ba.linkOperationId(initialDeposit.getId());
-                db.saveFiles();
+                ba.setDatabase(db);
+                ba.makeDeposit(Double.parseDouble(bankAccountData[2]), "Initial Deposit");
 
                 listener.onShowEvent("dashboard");
             }

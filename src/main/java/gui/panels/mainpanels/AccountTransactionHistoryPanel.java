@@ -78,7 +78,7 @@ public class AccountTransactionHistoryPanel extends JPanel {
             }
 
             if (e.getSource() == makeTransactionButton) {
-                AccountTransactionsPanel atp = new AccountTransactionsPanel(db, selectedAccount);
+                AccountTransactionsPanel atp = new AccountTransactionsPanel(db, c, selectedAccount.getId());
                 JScrollPane transactionsScroll = new JScrollPane(atp);
                 transactionsScroll.getVerticalScrollBar().setUI(new ModernScrollBarUI());
                 transactionsScroll.getVerticalScrollBar().setUnitIncrement(20);

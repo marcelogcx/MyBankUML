@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import bank.BankAccount;
+import bank.Client;
 import bank.Withdrawal;
 import core.Database;
 import core.SelectedAccountListener;
@@ -19,7 +20,8 @@ import gui.components.RoundedTextField;
 
 public class WithdrawPanel extends RoundedPanel implements SelectedAccountListener {
     private Database db;
-    private BankAccount selectedAccount;
+    private String selectedAccountId;
+    private Client client;
 
     private JLabel[] labels;
     private final ImageIcon WITHDRAW_ICON = new ImageIcon(getClass().getResource("/img/withdraw-icon.png"));
@@ -27,11 +29,12 @@ public class WithdrawPanel extends RoundedPanel implements SelectedAccountListen
     private JTextField descriptionTextField;
     private JButton withdrawButton;
 
-    public WithdrawPanel(Database db, BankAccount selectedAccount) {
+    public WithdrawPanel(Database db, Client client, String selectedAccountId) {
         super(25);
 
         this.db = db;
-        this.selectedAccount = selectedAccount;
+        this.client = client;
+        this.selectedAccountId = selectedAccountId;
 
         ThemeManager.styleSecondaryPanel(this);
 
@@ -84,19 +87,14 @@ public class WithdrawPanel extends RoundedPanel implements SelectedAccountListen
     private void addWithdrawActionListener(JButton button) {
         button.addActionListener((ActionEvent e) -> {
             if (e.getSource() == button) {
-                if (selectedAccount.getBalance() - Double.parseDouble(amountTextField.getText()) < 0) {
-                    JOptionPane.showMessageDialog(this, "Operation Fails!\n Insuficient funds", "Failure",
+                Withdrawal tempWith = this.client.makeWithdrawal(selectedAccountId,
+                        Double.parseDouble(amountTextField.getText()),
+                        descriptionTextField.getText());
+                if (tempWith == null) {
+                    JOptionPane.showMessageDialog(null, "Operation failed!\nInsuficient Funds", "Failure",
                             JOptionPane.INFORMATION_MESSAGE);
                     return;
                 }
-                System.out.println("deposit button");
-                String[] depositData = { descriptionTextField.getText(), selectedAccount.getId(),
-                        amountTextField.getText(), "2024",
-                        "true" };
-                Withdrawal d = db.writeRecord(Withdrawal.class, depositData);
-                selectedAccount.linkOperationId(d.getId());
-                selectedAccount.adjustBalance(-d.getAmount());
-                db.saveFiles();
                 JOptionPane.showMessageDialog(this, "Operation Successful!", "Success",
                         JOptionPane.INFORMATION_MESSAGE);
             }
@@ -104,8 +102,8 @@ public class WithdrawPanel extends RoundedPanel implements SelectedAccountListen
     }
 
     @Override
-    public void onAccountChange(BankAccount selectedAccount) {
-        this.selectedAccount = selectedAccount;
+    public void onAccountChange(String selectedAccountId) {
+        this.selectedAccountId = selectedAccountId;
     }
 
 }
