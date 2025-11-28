@@ -21,6 +21,7 @@ import javax.xml.crypto.Data;
 
 import bank.BankAccount;
 import bank.Client;
+import bank.User;
 import core.ClientListener;
 import core.Database;
 import core.PanelEventListener;
@@ -127,7 +128,7 @@ public class ClientDashboardPanel extends JPanel implements ClientListener {
     }
 
     @Override
-    public void onAdditionBankAccount(List<String> bankAccountIds) {
+    public void onAdditionBankAccount(List<String> bankAccountIds, String id) {
         createBankAccountPanels(bankAccountIds);
         int numBankAccounts = bankAccountIds.size();
         if (numBankAccounts < 3) {

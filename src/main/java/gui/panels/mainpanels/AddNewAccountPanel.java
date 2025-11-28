@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import bank.BankAccount;
 import bank.Client;
 import bank.Deposit;
+import core.AddNewAccountListener;
 import core.Database;
 import core.PanelEventListener;
 import core.ThemeManager;
@@ -69,7 +70,7 @@ public class AddNewAccountPanel extends JPanel {
         ThemeManager.styleFieldLabel(labels[3]);
 
         // Account Type Combo Box
-        String[] accountTypeValues = { "CHECKING", "SAVINGS" };
+        String[] accountTypeValues = { "CHECKING", "SAVINGS", "BUSINESS" };
         accountTypeBox = new RoundedComboBox<>(accountTypeValues);
         accountTypeBox.setBounds(10, 160, 345, 40);
         ThemeManager.styleRoundedComboBox(accountTypeBox);

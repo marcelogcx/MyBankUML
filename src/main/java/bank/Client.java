@@ -32,14 +32,14 @@ public class Client extends User {
         this.bankAccountIds = bankAccountIds;
     }
 
-    public void addListener(ClientListener cl) {
+    public void addClientListener(ClientListener cl) {
         listeners.add(cl);
     }
 
     public void linkBankAccount(String bankAccountId) {
         this.bankAccountIds.add(bankAccountId);
         for (ClientListener cl : listeners) {
-            cl.onAdditionBankAccount(bankAccountIds);
+            cl.onAdditionBankAccount(bankAccountIds, getId());
         }
     }
 

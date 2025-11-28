@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 
 import bank.BankAccount;
 import bank.Client;
+import bank.User;
 import core.ClientListener;
 import core.Database;
 import core.PanelManager;
@@ -44,7 +45,7 @@ public class TransactionsPanel extends JPanel implements ClientListener {
 
         this.db = db;
         this.c = c;
-        c.addListener(this);
+        c.addClientListener(this);
 
         listeners = new ArrayList<>();
         labels = new JLabel[2];
@@ -125,7 +126,7 @@ public class TransactionsPanel extends JPanel implements ClientListener {
     }
 
     @Override
-    public void onAdditionBankAccount(List<String> bankAccountIds) {
+    public void onAdditionBankAccount(List<String> bankAccountIds, String id) {
 
         List<BankAccount> bankAccounts = db.getClientBankAccounts(c.getBankAccountIds());
         if (bankAccounts.size() > 1) {

@@ -22,6 +22,8 @@ import bank.UserType;
 import bank.Admin;
 import bank.Client;
 import bank.Teller;
+import core.AddNewAccountListener;
+import core.ClientListener;
 import core.Database;
 import core.DeleteUserListener;
 import core.PanelEventListener;
@@ -30,7 +32,7 @@ import gui.components.RoundedLabel;
 import gui.components.RoundedPanel;
 import gui.panels.mainpanels.ClientDashboardPanel;
 
-public class SearchResultsPanel extends RoundedPanel {
+public class SearchResultsPanel extends RoundedPanel implements ClientListener {
     private DeleteUserListener deleteUserListener;
     private User[] users;
     private User loggedUser;
@@ -113,6 +115,7 @@ public class SearchResultsPanel extends RoundedPanel {
             final int INDEX = i;
             Client c = (Client) users[i];
 
+            c.addClientListener(SearchResultsPanel.this);
             separators[i] = new JSeparator(SwingConstants.HORIZONTAL);
             separators[i].setForeground(new Color(107, 124, 147, 95));
             separators[i].setBounds(20, 110 + (i * 40), 994, 1);
@@ -127,7 +130,6 @@ public class SearchResultsPanel extends RoundedPanel {
                     cdp.setTitleDescription(c.getFullname() + " - " + c.getUsername(),
                             "Here's an overview of the client's accounts");
                     panelEventListener.onAddEvent("clientBankAccounts", cdp, new Dimension(0, 0));
-
                 }
             });
             JPopupMenu popupMenu = new JPopupMenu();
@@ -240,6 +242,7 @@ public class SearchResultsPanel extends RoundedPanel {
                     String id = db.getIdFromUsername(users[INDEX].getUsername());
                     User tempUser = db.readRecord(User.class, id);
                     users[INDEX] = tempUser;
+
                     db.saveFiles();
                     deleteUserListener.onUserDeletion(users);
                 }
@@ -313,8 +316,19 @@ public class SearchResultsPanel extends RoundedPanel {
         }
     }
 
-    public void addListener(DeleteUserListener dul) {
+    public void addDeleteListener(DeleteUserListener dul) {
         deleteUserListener = dul;
     }
 
+    @Override
+    public void onAdditionBankAccount(List<String> bankAccountIds, String id) {
+        for (int i = 0; i < users.length; i++) {
+            if (users[i].getId() == id) {
+
+                labels[14 + i * 7].setText(Integer.toString(Integer.parseInt(labels[14 + i * 7].getText()) + 1));
+                return;
+            }
+        }
+        repaint();
+    }
 }

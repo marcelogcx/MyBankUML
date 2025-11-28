@@ -180,7 +180,7 @@ public class RegistrationPanel extends JPanel {
                         }
                         JOptionPane.showMessageDialog(this, "Client Created!", "Success",
                                 JOptionPane.INFORMATION_MESSAGE);
-                        createUserListener.onUserCreation(c);
+                        createUserListener.onUserCreation();
                     } else {
                         Admin tempAdmin = (Admin) loggedUser;
                         User u = tempAdmin.register(UserType.CLIENT, userData[0], userData[1], userData[2],
@@ -194,7 +194,7 @@ public class RegistrationPanel extends JPanel {
                         }
                         JOptionPane.showMessageDialog(this, "Client Created!", "Success",
                                 JOptionPane.INFORMATION_MESSAGE);
-                        createUserListener.onUserCreation(tempAdmin);
+                        createUserListener.onUserCreation();
                     }
 
                     break;
@@ -210,7 +210,7 @@ public class RegistrationPanel extends JPanel {
                     }
                     JOptionPane.showMessageDialog(this, "Teller Created!", "Success",
                             JOptionPane.INFORMATION_MESSAGE);
-                    createUserListener.onUserCreation(tempAdmin);
+                    createUserListener.onUserCreation();
                     break;
                 default:
                     throw new IllegalArgumentException("Admin cannot be created");

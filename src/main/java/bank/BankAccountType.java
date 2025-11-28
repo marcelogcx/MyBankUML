@@ -2,5 +2,6 @@ package bank;
 
 public enum BankAccountType {
     CHECKING,
-    SAVINGS
+    SAVINGS,
+    BUSINESS
 }

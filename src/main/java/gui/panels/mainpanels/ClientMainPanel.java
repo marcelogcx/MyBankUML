@@ -48,7 +48,7 @@ public class ClientMainPanel extends JPanel {
             dashboardPanel
                     .setPreferredSize(new Dimension(774, 800 + 322 * ((int) Math.ceil(numBankAccounts / 2.f) - 2)));
         }
-        c.addListener(dashboardPanel);
+        c.addClientListener(dashboardPanel);
 
         TransactionsPanel tp = new TransactionsPanel(db, c);
         JScrollPane transactionsScroll = new JScrollPane(tp);

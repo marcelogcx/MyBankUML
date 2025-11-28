@@ -84,7 +84,7 @@ public class TellerDashboardPanel extends JPanel implements DeleteUserListener, 
         searchResultScroll.getVerticalScrollBar().setUnitIncrement(20);
         searchResultScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         searchResultScroll.setBorder(BorderFactory.createEmptyBorder());
-        searchResultPanel.addListener(this);
+        searchResultPanel.addDeleteListener(this);
 
         for (JLabel l : labels) {
             add(l);
@@ -113,7 +113,7 @@ public class TellerDashboardPanel extends JPanel implements DeleteUserListener, 
                 searchResultScroll.getVerticalScrollBar().setUnitIncrement(20);
                 searchResultScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
                 searchResultScroll.setBorder(BorderFactory.createEmptyBorder());
-                searchResultPanel.addListener(this);
+                searchResultPanel.addDeleteListener(this);
                 add(searchResultScroll);
                 revalidate();
                 repaint();
@@ -140,7 +140,7 @@ public class TellerDashboardPanel extends JPanel implements DeleteUserListener, 
                 searchResultScroll.getVerticalScrollBar().setUnitIncrement(20);
                 searchResultScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
                 searchResultScroll.setBorder(BorderFactory.createEmptyBorder());
-                searchResultPanel.addListener(this);
+                searchResultPanel.addDeleteListener(this);
                 add(searchResultScroll);
                 revalidate();
                 repaint();
@@ -189,14 +189,14 @@ public class TellerDashboardPanel extends JPanel implements DeleteUserListener, 
         searchResultScroll.getVerticalScrollBar().setUnitIncrement(20);
         searchResultScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         searchResultScroll.setBorder(BorderFactory.createEmptyBorder());
-        searchResultPanel.addListener(this);
+        searchResultPanel.addDeleteListener(this);
         add(searchResultScroll);
         revalidate();
         repaint();
     }
 
     @Override
-    public void onUserCreation(User user) {
+    public void onUserCreation() {
 
         // Search Bar
         User[] clients = t.getClients(db);
@@ -229,7 +229,7 @@ public class TellerDashboardPanel extends JPanel implements DeleteUserListener, 
         searchResultScroll.getVerticalScrollBar().setUnitIncrement(20);
         searchResultScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         searchResultScroll.setBorder(BorderFactory.createEmptyBorder());
-        searchResultPanel.addListener(this);
+        searchResultPanel.addDeleteListener(this);
 
         add(searchBar);
         add(searchResultScroll);

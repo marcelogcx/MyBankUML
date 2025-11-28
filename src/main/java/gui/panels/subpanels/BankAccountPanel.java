@@ -2,6 +2,7 @@ package gui.panels.subpanels;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Image;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -17,6 +18,7 @@ public class BankAccountPanel extends RoundedPanel {
     private JLabel[] labels;
     private final ImageIcon CHECKING_ICON = new ImageIcon(getClass().getResource("/img/checking-icon.png"));
     private final ImageIcon SAVING_ICON = new ImageIcon(getClass().getResource("/img/saving-icon.png"));
+    private final ImageIcon BUSINESS_ICON = new ImageIcon(getClass().getResource("/img/business-icon.png"));
 
     public BankAccountPanel(BankAccount b) {
         super(25);
@@ -50,11 +52,12 @@ public class BankAccountPanel extends RoundedPanel {
         switch (b.getBankAccountType()) {
             case CHECKING -> {
                 labels[4].setIcon(CHECKING_ICON);
-                break;
             }
             case SAVINGS -> {
                 labels[4].setIcon(SAVING_ICON);
-                break;
+            }
+            case BUSINESS -> {
+                labels[4].setIcon(BUSINESS_ICON);
             }
         }
         labels[4].setBounds(10, 160, 64, 64);
