@@ -154,15 +154,41 @@ public class RegistrationPanel extends JPanel {
                 return;
             }
             userData[0] = textFields[0].getText();
+            if (userData[0] == null || userData[0].isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Client not Created!\nFull Name not provided",
+                        "Failure",
+                        JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
             userData[1] = textFields[1].getText();
+            if (userData[1] == null || userData[1].isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Client not Created!\nEmail not provided",
+                        "Failure",
+                        JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
             userData[2] = textFields[2].getText();
+            if (userData[2] == null || userData[2].isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Client not Created!\nUsername not provided",
+                        "Failure",
+                        JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
             userData[3] = textFields[3].getText();
+            if (userData[3] == null || userData[3].isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Client not Created!\nPassword not provided",
+                        "Failure",
+                        JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
             UserType userType = (UserType) userTypeBox.getSelectedItem();
             userData[4] = userType.toString();
             userData[5] = textFields[4].getText();
 
             if (!userData[3].equals(userData[5])) {
-                System.out.println("Not same password");
+                JOptionPane.showMessageDialog(this, "Client not Created!\nPasswords doesn't match",
+                        "Failure",
+                        JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
 
