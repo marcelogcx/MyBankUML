@@ -1,0 +1,106 @@
+package integration;
+
+import java.util.List;
+import bank.BankAccount;
+import bank.BankAccountType;
+import bank.Client;
+import bank.Deposit;
+import bank.Transfer;
+import bank.Withdrawal;
+import core.Database;
+
+public class IntegrationTest3 {
+
+    public static void main(String[] args) {
+        System.out.println("Integration Test 3: To test the interaction between Bank Account and Client modules.");
+
+        Database db = new Database();
+
+        // Create a test client
+        String[] clientData = {
+                "Multi-Account Client",
+                "multi@test.com",
+                "multiclient",
+                "pass456"
+        };
+        Client client = db.writeRecord(Client.class, clientData);
+        client.setDatabase(db);
+
+        System.out.println("Created client with id: " + client.getId());
+
+        // Create 2 bank accounts
+        String[] acc1Data = {
+                "Checking A",
+                BankAccountType.CHECKING.name(),
+                "1500.0"
+        };
+        String[] acc2Data = {
+                "Savings B",
+                BankAccountType.SAVINGS.name(),
+                "300.0"
+        };
+
+        BankAccount accountA = db.writeRecord(BankAccount.class, acc1Data);
+        accountA.setDatabase(db);
+
+        BankAccount accountB = db.writeRecord(BankAccount.class, acc2Data);
+        accountB.setDatabase(db);
+
+        System.out.println("Created account A: " + accountA.getId() + " balance=" + accountA.getBalance());
+        System.out.println("Created account B: " + accountB.getId() + " balance=" + accountB.getBalance());
+
+        // Link both accounts to client
+        client.linkBankAccount(accountA.getId());
+        client.linkBankAccount(accountB.getId());
+
+        System.out.println("\nClient's account IDs: " + client.getBankAccountIds());
+
+        // Display client bank accounts with Database helper
+        System.out.println("\nAll bank accounts for this client");
+        List<BankAccount> clientAccounts = db.getClientBankAccounts(client.getBankAccountIds());
+        for (BankAccount acc : clientAccounts) {
+            System.out.println(acc.getId() + " | " + acc.getAccountName() + " | type=" +
+                    acc.getBankAccountType() + " | balance=" + acc.getBalance());
+        }
+
+        // Client makes transfer 
+        System.out.println("\nClient transfers 400.0");
+        Transfer transfer = client.makeTransaction(
+                accountA.getId(),
+                accountB.getId(),
+                400.0,
+                "Rent payment"
+        );
+
+        if (transfer == null) {
+            System.out.println("Transfer FAILED");
+        } else {
+            System.out.println("Transfer SUCCESS: " + transfer);
+        }
+
+        // Reload accounts
+        accountA = db.readRecord(BankAccount.class, accountA.getId());
+        accountB = db.readRecord(BankAccount.class, accountB.getId());
+
+        System.out.println("Balance A after transfer: " + accountA.getBalance());
+        System.out.println("Balance B after transfer: " + accountB.getBalance());
+
+        // Additional deposit and withdrawal on different accounts
+        System.out.println("\nClient deposits 200.0 into B");
+        Deposit depB = client.makeDeposit(accountB.getId(), 200.0, "Bonus");
+        System.out.println(depB == null ? "Deposit to B FAILED" : "Deposit to B SUCCESS: " + depB);
+
+        System.out.println("\nClient withdraws 100.0 from A");
+        Withdrawal wdA = client.makeWithdrawal(accountA.getId(), 100.0, "Groceries");
+        System.out.println(wdA == null ? "Withdrawal from A FAILED" : "Withdrawal from A SUCCESS: " + wdA);
+
+        // Reload balances again
+        accountA = db.readRecord(BankAccount.class, accountA.getId());
+        accountB = db.readRecord(BankAccount.class, accountB.getId());
+
+        System.out.println("\nFinal balances:");
+        System.out.println("Account A (" + accountA.getId() + "): " + accountA.getBalance());
+        System.out.println("Account B (" + accountB.getId() + "): " + accountB.getBalance());
+
+    }
+}
