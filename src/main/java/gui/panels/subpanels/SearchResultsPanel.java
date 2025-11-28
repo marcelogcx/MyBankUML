@@ -149,6 +149,7 @@ public class SearchResultsPanel extends RoundedPanel implements ClientListener {
             blockItem.addActionListener(e -> {
                 users[INDEX].setIsUserBlocked(!users[INDEX].getIsUserBlocked());
                 deleteUserListener.onUserDeletion(users);
+                db.saveFiles();
             });
             popupMenu.add(deleteItem);
             popupMenu.add(blockItem);
@@ -175,15 +176,15 @@ public class SearchResultsPanel extends RoundedPanel implements ClientListener {
             clickablePanels[i].add(labels[12 + i * 7]);
 
             if (users[i].getIsUserBlocked() == true) {
-                labels[13 + i * 7] = new RoundedLabel("BLOCKED", 15);
+                labels[13 + i * 7] = new RoundedLabel("Blocked", 15);
                 labels[13 + i * 7].setBackground(Color.RED);
                 labels[13 + i * 7].setForeground(Color.WHITE);
             } else {
-                labels[13 + i * 7] = new RoundedLabel("ACTIVE", 15);
+                labels[13 + i * 7] = new RoundedLabel("Active", 15);
                 labels[13 + i * 7].setBackground(new Color(15, 76, 129));
                 labels[13 + i * 7].setForeground(Color.WHITE);
             }
-            labels[13 + i * 7].setBounds(740, 5, 80, 30);
+            labels[13 + i * 7].setBounds(740, 5, 65, 30);
             clickablePanels[i].add(labels[13 + i * 7]);
 
             if (c.getBankAccountIds() != null) {
@@ -263,6 +264,7 @@ public class SearchResultsPanel extends RoundedPanel implements ClientListener {
             blockItem.addActionListener(e -> {
                 users[INDEX].setIsUserBlocked(!users[INDEX].getIsUserBlocked());
                 deleteUserListener.onUserDeletion(users);
+                db.saveFiles();
             });
             popupMenu.add(deleteItem);
             popupMenu.add(blockItem);
@@ -289,15 +291,15 @@ public class SearchResultsPanel extends RoundedPanel implements ClientListener {
             clickablePanels[i].add(labels[12 + i * 7]);
 
             if (users[i].getIsUserBlocked() == true) {
-                labels[13 + i * 7] = new RoundedLabel("BLOCKED", 15);
+                labels[13 + i * 7] = new RoundedLabel("Blocked", 15);
                 labels[13 + i * 7].setBackground(Color.RED);
                 labels[13 + i * 7].setForeground(Color.WHITE);
             } else {
-                labels[13 + i * 7] = new RoundedLabel("ACTIVE", 15);
+                labels[13 + i * 7] = new RoundedLabel("Active", 15);
                 labels[13 + i * 7].setBackground(new Color(15, 76, 129));
                 labels[13 + i * 7].setForeground(Color.WHITE);
             }
-            labels[13 + i * 7].setBounds(740, 5, 80, 30);
+            labels[13 + i * 7].setBounds(740, 5, 65, 30);
             clickablePanels[i].add(labels[13 + i * 7]);
 
             if (users[i] instanceof Client) {

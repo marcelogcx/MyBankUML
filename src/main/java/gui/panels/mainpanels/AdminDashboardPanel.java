@@ -19,11 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
 import bank.Admin;
-import bank.BankAccount;
-import bank.Client;
-import bank.Teller;
 import bank.User;
-import core.CreateUserListener;
 import core.CreateUserListener;
 import core.Database;
 import core.DeleteUserListener;
@@ -103,71 +99,58 @@ public class AdminDashboardPanel extends JPanel implements DeleteUserListener, C
 
     private void addSearchActionListener(JButton button) {
         button.addActionListener((ActionEvent e) -> {
-            User[] users = null;
             if (e.getSource() == button) {
-                users = filterResults(a.getUsers(db), searchBar.getText());
-                remove(searchResultScroll);
-
-                searchResultPanel = new SearchResultsPanel(db, panelEventListener, a, users);
-                searchResultPanel.setPreferredSize(new Dimension(1040, 420));
-                if (users.length > 7) {
-                    searchResultPanel.setPreferredSize(new Dimension(1040, 420 + (users.length - 7) * 40));
-                }
-                searchResultScroll = new JScrollPane(searchResultPanel);
-                searchResultScroll.setBounds(10, 160, 754, 420);
-                searchResultScroll.getHorizontalScrollBar().setUI(new ModernScrollBarUI());
-                searchResultScroll.getVerticalScrollBar().setUI(new ModernScrollBarUI());
-                searchResultScroll.getVerticalScrollBar().setUnitIncrement(20);
-                searchResultScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-                searchResultScroll.setBorder(BorderFactory.createEmptyBorder());
-                searchResultPanel.addDeleteListener(this);
-                add(searchResultScroll);
-                revalidate();
-                repaint();
+                searchActionEvent();
             }
         });
     }
 
     private void addSearchActionListener(JTextField textField) {
         textField.addActionListener((ActionEvent e) -> {
-            User[] users = null;
             if (e.getSource() == textField) {
-                users = filterResults(a.getUsers(db), searchBar.getText());
-                remove(searchResultScroll);
-
-                searchResultPanel = new SearchResultsPanel(db, panelEventListener, a, users);
-                searchResultPanel.setPreferredSize(new Dimension(1040, 420));
-                if (users.length > 7) {
-                    searchResultPanel.setPreferredSize(new Dimension(1040, 420 + (users.length - 7) * 40));
-                }
-                searchResultScroll = new JScrollPane(searchResultPanel);
-                searchResultScroll.setBounds(10, 160, 754, 420);
-                searchResultScroll.getHorizontalScrollBar().setUI(new ModernScrollBarUI());
-                searchResultScroll.getVerticalScrollBar().setUI(new ModernScrollBarUI());
-                searchResultScroll.getVerticalScrollBar().setUnitIncrement(20);
-                searchResultScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-                searchResultScroll.setBorder(BorderFactory.createEmptyBorder());
-                searchResultPanel.addDeleteListener(this);
-                add(searchResultScroll);
-                revalidate();
-                repaint();
+                searchActionEvent();
             }
         });
     }
 
-    private Client[] filterResults(User[] clients, String text) {
-        List<Client> tempList = new ArrayList<>();
+    private void searchActionEvent() {
+
+        User[] users = null;
+        users = filterResults(a.getUsers(db), searchBar.getText());
+        remove(searchResultScroll);
+
+        searchResultPanel = new SearchResultsPanel(db, panelEventListener, a, users);
+        searchResultPanel.setPreferredSize(new Dimension(1040, 420));
+        if (users.length > 7) {
+            searchResultPanel.setPreferredSize(new Dimension(1040, 420 + (users.length - 7) * 40));
+        }
+        searchResultScroll = new JScrollPane(searchResultPanel);
+        searchResultScroll.setBounds(10, 160, 754, 420);
+        searchResultScroll.getHorizontalScrollBar().setUI(new ModernScrollBarUI());
+        searchResultScroll.getVerticalScrollBar().setUI(new ModernScrollBarUI());
+        searchResultScroll.getVerticalScrollBar().setUnitIncrement(20);
+        searchResultScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        searchResultScroll.setBorder(BorderFactory.createEmptyBorder());
+        searchResultPanel.addDeleteListener(this);
+        add(searchResultScroll);
+        revalidate();
+        repaint();
+
+    }
+
+    private User[] filterResults(User[] clients, String text) {
+        List<User> tempList = new ArrayList<>();
         for (User user : clients) {
             if (user == null) {
                 continue;
             }
 
             if (isMatch(user, text)) {
-                Client tempClient = (Client) user;
+                User tempClient = user;
                 tempList.add(tempClient);
             }
         }
-        return tempList.toArray(new Client[0]);
+        return tempList.toArray(new User[0]);
     }
 
     private boolean isMatch(User user, String query) {
