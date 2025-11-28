@@ -1,0 +1,79 @@
+package integration;
+
+import bank.BankAccount;
+import bank.BankAccountType;
+import bank.Client;
+import bank.Deposit;
+import bank.Withdrawal;
+import core.Database;
+
+public class IntegrationTest2 {
+
+    public static void main(String[] args) {
+        System.out.println("Integration Test 2: To test the interaction between the Bank Operation and Bank Account modules.");
+
+        // Initialize database
+        Database db = new Database();
+
+        // Create a test client
+        String[] clientData = {
+                "Test Client",
+                "client@test.com",
+                "testclient",
+                "pass123"
+        };
+        Client client = db.writeRecord(Client.class, clientData);
+        client.setDatabase(db);
+
+        System.out.println("Created client with id: " + client.getId());
+
+        // Create test bank account
+        String[] accountData = {
+                "Primary Checking",
+                BankAccountType.CHECKING.name(),
+                "1000.0"
+        };
+        BankAccount account = db.writeRecord(BankAccount.class, accountData);
+        account.setDatabase(db);
+
+        System.out.println("Created bank account with id: " + account.getId());
+        System.out.println("Initial balance: " + account.getBalance());
+
+        // Link account to client
+        client.linkBankAccount(account.getId());
+        System.out.println("Linked account " + account.getId() + " to client " + client.getId());
+
+        // Client makes deposit
+        System.out.println("\nClient makes a deposit of 200.0");
+        Deposit deposit = client.makeDeposit(account.getId(), 200.0, "Client test deposit");
+
+        if (deposit == null) {
+            System.out.println("Deposit FAILED");
+        } else {
+            System.out.println("Deposit SUCCESS: " + deposit);
+        }
+
+        // Reload account from DB, print new balance
+        account = db.readRecord(BankAccount.class, account.getId());
+        System.out.println("Balance after deposit: " + account.getBalance());
+
+        // Client makes withdrawal
+        System.out.println("\nClient makes a withdrawal of 150.0");
+        Withdrawal withdrawal = client.makeWithdrawal(account.getId(), 150.0, "Client test withdrawal");
+
+        if (withdrawal == null) {
+            System.out.println("Withdrawal FAILED");
+        } else {
+            System.out.println("Withdrawal SUCCESS: " + withdrawal);
+        }
+
+        // Reload account from DB and print new balance
+        account = db.readRecord(BankAccount.class, account.getId());
+        System.out.println("Balance after withdrawal: " + account.getBalance());
+
+        // Show list of operations for this account
+        System.out.println("\nOperations recorded for this account");
+        account.getOperationIds().forEach(opId -> System.out.println("Operation ID: " + opId));
+
+    }
+}
