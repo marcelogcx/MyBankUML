@@ -1,10 +1,6 @@
 package integration;
 
-import bank.BankAccount;
-import bank.BankAccountType;
-import bank.Client;
-import bank.Deposit;
-import bank.Withdrawal;
+import bank.*;
 import core.Database;
 
 public class IntegrationTest2 {
