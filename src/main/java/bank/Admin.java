@@ -38,14 +38,13 @@ public class Admin extends User {
     }
 
     public User register(UserType userType, String fullname, String email, String username,
-            String password) {
+            String password) throws IllegalArgumentException {
         if (getDatabase() == null) {
             System.err.println("Database not initialized");
             return null;
         }
         if (getDatabase().usernameExists(username)) {
-            System.err.println("Username already exists");
-            return null;
+            throw new IllegalArgumentException("Username already exists");
         }
         String[] recordData = { fullname, email, username, password };
         switch (userType) {

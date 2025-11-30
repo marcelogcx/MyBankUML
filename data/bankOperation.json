@@ -1,1 +1,102 @@
-{ }
+{
+  "OP00001" : {
+    "id" : "OP00001",
+    "description" : "Nike Endorsement Payment",
+    "bankAccountId" : "CHK00001",
+    "amount" : 50000.0,
+    "date" : "1996-06-16",
+    "isSuccessfull" : true,
+    "operationType" : "DEPOSIT"
+  },
+  "OP00002" : {
+    "id" : "OP00002",
+    "description" : "Car Payment",
+    "bankAccountId" : "CHK00001",
+    "amount" : 15000.0,
+    "date" : "1996-06-17",
+    "isSuccessfull" : true,
+    "operationType" : "WITHDRAWAL"
+  },
+  "OP00003" : {
+    "id" : "OP00003",
+    "description" : "Playoff Bonus 1996",
+    "bankAccountId" : "SAV00001",
+    "amount" : 500000.0,
+    "date" : "1996-06-18",
+    "isSuccessfull" : true,
+    "operationType" : "DEPOSIT"
+  },
+  "OP00004" : {
+    "id" : "OP00004",
+    "description" : "Air Jordan Brand Revenue",
+    "bankAccountId" : "BUS00001",
+    "amount" : 1000000.0,
+    "date" : "1996-06-19",
+    "isSuccessfull" : true,
+    "operationType" : "DEPOSIT"
+  },
+  "OP00005" : {
+    "id" : "OP00005",
+    "description" : "Salary Deposit",
+    "bankAccountId" : "CHK00002",
+    "amount" : 25000.0,
+    "date" : "1996-06-16",
+    "isSuccessfull" : true,
+    "operationType" : "DEPOSIT"
+  },
+  "OP00006" : {
+    "id" : "OP00006",
+    "description" : "Championship Bonus",
+    "bankAccountId" : "SAV00002",
+    "amount" : 100000.0,
+    "date" : "1996-06-18",
+    "isSuccessfull" : true,
+    "operationType" : "DEPOSIT"
+  },
+  "OP00007" : {
+    "id" : "OP00007",
+    "description" : "Hair Dye & Tattoos",
+    "bankAccountId" : "CHK00003",
+    "amount" : 8000.0,
+    "date" : "1996-06-15",
+    "isSuccessfull" : true,
+    "operationType" : "WITHDRAWAL"
+  },
+  "OP00008" : {
+    "id" : "OP00008",
+    "description" : "3-Point Contest Winnings",
+    "bankAccountId" : "CHK00004",
+    "amount" : 15000.0,
+    "date" : "1996-06-14",
+    "isSuccessfull" : true,
+    "operationType" : "DEPOSIT"
+  },
+  "OP00009" : {
+    "id" : "OP00009",
+    "description" : "Salary Deposit",
+    "bankAccountId" : "CHK00005",
+    "amount" : 20000.0,
+    "date" : "1996-06-16",
+    "isSuccessfull" : true,
+    "operationType" : "DEPOSIT"
+  },
+  "OP00010" : {
+    "id" : "OP00010",
+    "description" : "Transfer to Savings",
+    "bankAccountId" : "CHK00001",
+    "recipientId" : "SAV00001",
+    "amount" : 25000.0,
+    "date" : "1996-06-20",
+    "isSuccessfull" : true,
+    "operationType" : "TRANSFER"
+  },
+  "OP00011" : {
+    "id" : "OP00011",
+    "description" : "Rebound Incentive Bonus",
+    "bankAccountId" : "CHK00003",
+    "amount" : 30000.0,
+    "date" : "1996-06-18",
+    "isSuccessfull" : true,
+    "operationType" : "DEPOSIT"
+  }
+}

@@ -95,13 +95,19 @@ public class LoginPanel extends JPanel {
                 password = passwordTextField.getText();
             }
             if (!db.usernameExists(username)) {
-                System.out.println("User does not exist");
+                javax.swing.JOptionPane.showMessageDialog(this,
+                    "Login Failed!\nUser does not exist",
+                    "Error",
+                    javax.swing.JOptionPane.ERROR_MESSAGE);
                 return;
             }
             String userId = db.getIdFromUsername(username);
             User u = db.readRecord(User.class, userId);
             if (!u.getPassword().equals(password)) {
-                System.out.println("wrong password");
+                javax.swing.JOptionPane.showMessageDialog(this,
+                    "Login Failed!\nIncorrect password",
+                    "Error",
+                    javax.swing.JOptionPane.ERROR_MESSAGE);
                 return;
             }
             u.setDatabase(db);

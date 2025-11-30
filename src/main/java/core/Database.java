@@ -146,6 +146,17 @@ public class Database {
 
     public <T> T writeRecord(Class<T> c, String[] recordData) {
         if (c == Client.class) {
+            // Validate username and password
+            String username = recordData[2];
+            String password = recordData[3];
+
+            if (!ValidationUtil.isValidUsername(username)) {
+                throw new IllegalArgumentException(ValidationUtil.getUsernameErrorMessage(username));
+            }
+            if (!ValidationUtil.isValidPassword(password)) {
+                throw new IllegalArgumentException(ValidationUtil.getPasswordErrorMessage(password));
+            }
+
             String id = idGen.generateClientId();
             Client tempClient = new Client(id, UserType.CLIENT, recordData[0], recordData[1],
                     recordData[2],
@@ -155,6 +166,17 @@ public class Database {
             return c.cast(tempClient);
         }
         if (c == Teller.class) {
+            // Validate username and password
+            String username = recordData[2];
+            String password = recordData[3];
+
+            if (!ValidationUtil.isValidUsername(username)) {
+                throw new IllegalArgumentException(ValidationUtil.getUsernameErrorMessage(username));
+            }
+            if (!ValidationUtil.isValidPassword(password)) {
+                throw new IllegalArgumentException(ValidationUtil.getPasswordErrorMessage(password));
+            }
+
             String id = idGen.generateClientId();
             Teller tempTeller = new Teller(id, UserType.TELLER, recordData[0], recordData[1],
                     recordData[2], recordData[3], false);
@@ -163,6 +185,17 @@ public class Database {
             return c.cast(tempTeller);
         }
         if (c == Admin.class) {
+            // Validate username and password
+            String username = recordData[2];
+            String password = recordData[3];
+
+            if (!ValidationUtil.isValidUsername(username)) {
+                throw new IllegalArgumentException(ValidationUtil.getUsernameErrorMessage(username));
+            }
+            if (!ValidationUtil.isValidPassword(password)) {
+                throw new IllegalArgumentException(ValidationUtil.getPasswordErrorMessage(password));
+            }
+
             String id = idGen.generateClientId();
             Admin tempAdmin = new Admin(id, UserType.ADMIN, recordData[0], recordData[1],
                     recordData[2], recordData[3], false);
@@ -355,6 +388,17 @@ public class Database {
             if (tempClient == null) {
                 System.err.println("Client not found for update: " + id);
                 return null;
+            }
+
+            // Validate username and password
+            String username = recordData[2];
+            String password = recordData[3];
+
+            if (!ValidationUtil.isValidUsername(username)) {
+                throw new IllegalArgumentException(ValidationUtil.getUsernameErrorMessage(username));
+            }
+            if (!ValidationUtil.isValidPassword(password)) {
+                throw new IllegalArgumentException(ValidationUtil.getPasswordErrorMessage(password));
             }
 
             // Remove old username mapping
