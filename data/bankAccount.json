@@ -1,0 +1,93 @@
+{
+  "CHK00001" : {
+    "id" : "CHK00001",
+    "accountName" : "Jordan Primary Checking",
+    "balance" : 125000.5,
+    "operationIds" : [ "OP00001", "OP00002", "OP00010" ],
+    "bankAccountType" : "CHECKING"
+  },
+  "SAV00001" : {
+    "id" : "SAV00001",
+    "accountName" : "Jordan Savings",
+    "balance" : 2500000.0,
+    "operationIds" : [ "OP00003" ],
+    "bankAccountType" : "SAVINGS"
+  },
+  "BUS00001" : {
+    "id" : "BUS00001",
+    "accountName" : "Air Jordan Inc.",
+    "balance" : 5000000.0,
+    "operationIds" : [ "OP00004" ],
+    "bankAccountType" : "BUSINESS"
+  },
+  "CHK00002" : {
+    "id" : "CHK00002",
+    "accountName" : "Pippen Checking",
+    "balance" : 45000.75,
+    "operationIds" : [ "OP00005" ],
+    "bankAccountType" : "CHECKING"
+  },
+  "SAV00002" : {
+    "id" : "SAV00002",
+    "accountName" : "Pippen Savings",
+    "balance" : 850000.0,
+    "operationIds" : [ "OP00006" ],
+    "bankAccountType" : "SAVINGS"
+  },
+  "CHK00003" : {
+    "id" : "CHK00003",
+    "accountName" : "Rodman Checking",
+    "balance" : 32000.0,
+    "operationIds" : [ "OP00007", "OP00011" ],
+    "bankAccountType" : "CHECKING"
+  },
+  "SAV00003" : {
+    "id" : "SAV00003",
+    "accountName" : "Rodman Savings",
+    "balance" : 650000.0,
+    "operationIds" : [ ],
+    "bankAccountType" : "SAVINGS"
+  },
+  "CHK00004" : {
+    "id" : "CHK00004",
+    "accountName" : "Kerr Checking",
+    "balance" : 28500.25,
+    "operationIds" : [ "OP00008" ],
+    "bankAccountType" : "CHECKING"
+  },
+  "SAV00004" : {
+    "id" : "SAV00004",
+    "accountName" : "Kerr Savings",
+    "balance" : 425000.0,
+    "operationIds" : [ ],
+    "bankAccountType" : "SAVINGS"
+  },
+  "CHK00005" : {
+    "id" : "CHK00005",
+    "accountName" : "Kukoc Checking",
+    "balance" : 35000.0,
+    "operationIds" : [ "OP00009" ],
+    "bankAccountType" : "CHECKING"
+  },
+  "SAV00005" : {
+    "id" : "SAV00005",
+    "accountName" : "Kukoc Savings",
+    "balance" : 520000.0,
+    "operationIds" : [ ],
+    "bankAccountType" : "SAVINGS"
+  },
+  "CHK00006" : {
+    "id" : "CHK00006",
+    "accountName" : "Harper Checking",
+    "balance" : 27500.5,
+    "operationIds" : [ ],
+    "bankAccountType" : "CHECKING"
+  },
+  "SAV00006" : {
+    "id" : "SAV00006",
+    "accountName" : "Harper Savings",
+    "balance" : 380000.0,
+    "operationIds" : [ ],
+    "bankAccountType" : "SAVINGS"
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "C00002" : {
+    "id" : "C00002",
+    "userType" : "CLIENT",
+    "fullname" : "Scottie Pippen",
+    "email" : "spippen@bulls.com",
+    "username" : "spippen33@gmail.com",
+    "password" : "Pippen33!",
+    "isUserBlocked" : false,
+    "bankAccountIds" : [ "CHK00002", "SAV00002" ]
+  },
+  "C00001" : {
+    "id" : "C00001",
+    "userType" : "CLIENT",
+    "fullname" : "Michael Jordan",
+    "email" : "mjordan@bulls.com",
+    "username" : "airjordan23@gmail.com",
+    "password" : "Jumpman23!",
+    "isUserBlocked" : false,
+    "bankAccountIds" : [ "CHK00001", "SAV00001", "BUS00001" ]
+  },
+  "A00001" : {
+    "id" : "A00001",
+    "userType" : "ADMIN",
+    "fullname" : "Phil Jackson",
+    "email" : "philjackson@bulls.com",
+    "username" : "philjackson@gmail.com",
+    "password" : "ChicagoBulls1996!",
+    "isUserBlocked" : false
+  },
+  "C00006" : {
+    "id" : "C00006",
+    "userType" : "CLIENT",
+    "fullname" : "Ron Harper",
+    "email" : "rharper@bulls.com",
+    "username" : "ronharper9@gmail.com",
+    "password" : "Defense9!",
+    "isUserBlocked" : false,
+    "bankAccountIds" : [ "CHK00006", "SAV00006" ]
+  },
+  "C00005" : {
+    "id" : "C00005",
+    "userType" : "CLIENT",
+    "fullname" : "Toni Kukoc",
+    "email" : "tkukoc@bulls.com",
+    "username" : "tonikukoc7@gmail.com",
+    "password" : "Croatian7!",
+    "isUserBlocked" : false,
+    "bankAccountIds" : [ "CHK00005", "SAV00005" ]
+  },
+  "C00004" : {
+    "id" : "C00004",
+    "userType" : "CLIENT",
+    "fullname" : "Steve Kerr",
+    "email" : "skerr@bulls.com",
+    "username" : "stevekerr25@gmail.com",
+    "password" : "ThreePoint25!",
+    "isUserBlocked" : false,
+    "bankAccountIds" : [ "CHK00004", "SAV00004" ]
+  },
+  "C00003" : {
+    "id" : "C00003",
+    "userType" : "CLIENT",
+    "fullname" : "Dennis Rodman",
+    "email" : "drodman@bulls.com",
+    "username" : "theworm91@gmail.com",
+    "password" : "Rebound91!",
+    "isUserBlocked" : false,
+    "bankAccountIds" : [ "CHK00003", "SAV00003" ]
+  }
+}

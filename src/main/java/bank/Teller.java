@@ -34,23 +34,23 @@ public class Teller extends User {
 
     /**
      * Creates account for client
-     * 
+     *
      * @param userType Type of user account to create
      * @param fullname Client's full name
      * @param email    Client's email
      * @param username Client's username
      * @param password Client's password
      * @return Created Client object or null if failed
+     * @throws IllegalArgumentException if validation fails
      */
     public Client register(UserType userType, String fullname, String email, String username,
-            String password) {
+            String password) throws IllegalArgumentException {
         if (getDatabase() == null) {
             System.err.println("Database not initialized");
             return null;
         }
         if (getDatabase().usernameExists(username)) {
-            System.err.println("Username already exists");
-            return null;
+            throw new IllegalArgumentException("Username already exists");
         }
         String[] recordData = { fullname, email, username, password };
         Client newClient = getDatabase().writeRecord(Client.class, recordData);

@@ -29,7 +29,8 @@ Make sure you have the following installed:
 git clone https://github.com/M-PERSIC/BankUml.git
 cd BankUml
 ```
-2. OTHER METHOD
+2. Running Application
+
 You can run the code by in root directory, 
 mvn clean compile (note be on Java 21)
 then after a sucessful build run
@@ -38,6 +39,7 @@ mvn exec:java.
 The GUI will open up if its sucessful register a new account but remember if you mvn clean compile again it will wipe the database.
 The database is stored in /target/classes/data so you can observe the account stored there.
 
+OTHER METHOD
 
 2. Compile the code:
 
@@ -52,7 +54,9 @@ javac -cp "libs/*" bank/*.java
 java -cp ".:libs/*" bank.Main
 # Windows
 java -cp ".;libs/*" bank.Main
+
 ```
+The repository has mock data so navigate to ~/data/user.json and use the username and password to login.
 
 To redownload the Lombok jar:
 

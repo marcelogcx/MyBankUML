@@ -85,7 +85,7 @@ public class RegistrationPanel extends JPanel {
         // Username Text Field
         textFields[2] = new RoundedTextField(false);
         textFields[2].setBounds(20, 240, 345, 40);
-        textFields[2].setPlaceholder("e.g. john123");
+        textFields[2].setPlaceholder("e.g. john123@gmail.com (lowercase only)");
         ThemeManager.styleRoundedTextField(textFields[2]);
 
         // User Type Label
@@ -112,7 +112,7 @@ public class RegistrationPanel extends JPanel {
         // Password Text Field
         textFields[3] = new RoundedTextField(false);
         textFields[3].setBounds(20, 340, 345, 40);
-        textFields[3].setPlaceholder("e.g. 12345");
+        textFields[3].setPlaceholder("8+ chars, 1 uppercase, 1 special");
         ThemeManager.styleRoundedTextField(textFields[3]);
 
         // Confirm Password Label
@@ -123,7 +123,7 @@ public class RegistrationPanel extends JPanel {
         // Confirm Password Text Field
         textFields[4] = new RoundedTextField(false);
         textFields[4].setBounds(385, 340, 345, 40);
-        textFields[4].setPlaceholder("e.g. 12345");
+        textFields[4].setPlaceholder("Re-enter password");
         ThemeManager.styleRoundedTextField(textFields[4]);
 
         // Join Button
@@ -194,49 +194,63 @@ public class RegistrationPanel extends JPanel {
 
             switch (userType) {
                 case CLIENT:
-                    if (loggedUser.getUserType() == UserType.TELLER) {
-                        Teller tempTeller = (Teller) loggedUser;
-                        Client c = tempTeller.register(UserType.CLIENT, userData[0], userData[1], userData[2],
-                                userData[3]);
-                        if (c == null) {
-                            JOptionPane.showMessageDialog(this, "Client not Created!\nUsername already exists",
-                                    "Failure",
+                    try {
+                        if (loggedUser.getUserType() == UserType.TELLER) {
+                            Teller tempTeller = (Teller) loggedUser;
+                            Client c = tempTeller.register(UserType.CLIENT, userData[0], userData[1], userData[2],
+                                    userData[3]);
+                            if (c == null) {
+                                JOptionPane.showMessageDialog(this, "Client not Created!\nDatabase error occurred",
+                                        "Failure",
+                                        JOptionPane.ERROR_MESSAGE);
+                                return;
+                            }
+                            JOptionPane.showMessageDialog(this, "Client Created!", "Success",
                                     JOptionPane.INFORMATION_MESSAGE);
-                            return;
-                        }
-                        JOptionPane.showMessageDialog(this, "Client Created!", "Success",
-                                JOptionPane.INFORMATION_MESSAGE);
-                        createUserListener.onUserCreation();
-                    } else {
-                        Admin tempAdmin = (Admin) loggedUser;
-                        User u = tempAdmin.register(UserType.CLIENT, userData[0], userData[1], userData[2],
-                                userData[3]);
+                            createUserListener.onUserCreation();
+                        } else {
+                            Admin tempAdmin = (Admin) loggedUser;
+                            User u = tempAdmin.register(UserType.CLIENT, userData[0], userData[1], userData[2],
+                                    userData[3]);
 
-                        if (u == null) {
-                            JOptionPane.showMessageDialog(this, "Client not Created!\nUsername already exists",
-                                    "Failure",
+                            if (u == null) {
+                                JOptionPane.showMessageDialog(this, "Client not Created!\nDatabase error occurred",
+                                        "Failure",
+                                        JOptionPane.ERROR_MESSAGE);
+                                return;
+                            }
+                            JOptionPane.showMessageDialog(this, "Client Created!", "Success",
                                     JOptionPane.INFORMATION_MESSAGE);
-                            return;
+                            createUserListener.onUserCreation();
                         }
-                        JOptionPane.showMessageDialog(this, "Client Created!", "Success",
-                                JOptionPane.INFORMATION_MESSAGE);
-                        createUserListener.onUserCreation();
+                    } catch (IllegalArgumentException ex) {
+                        JOptionPane.showMessageDialog(this, "Client not Created!\n" + ex.getMessage(),
+                                "Validation Error",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
                     }
 
                     break;
                 case TELLER:
-                    Admin tempAdmin = (Admin) loggedUser;
-                    User u = tempAdmin.register(UserType.TELLER, userData[0], userData[1], userData[2],
-                            userData[3]);
+                    try {
+                        Admin tempAdmin = (Admin) loggedUser;
+                        User u = tempAdmin.register(UserType.TELLER, userData[0], userData[1], userData[2],
+                                userData[3]);
 
-                    if (u == null) {
-                        JOptionPane.showMessageDialog(this, "Teller not Created!\nUsername already exists", "Failure",
+                        if (u == null) {
+                            JOptionPane.showMessageDialog(this, "Teller not Created!\nDatabase error occurred", "Failure",
+                                    JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                        JOptionPane.showMessageDialog(this, "Teller Created!", "Success",
                                 JOptionPane.INFORMATION_MESSAGE);
+                        createUserListener.onUserCreation();
+                    } catch (IllegalArgumentException ex) {
+                        JOptionPane.showMessageDialog(this, "Teller not Created!\n" + ex.getMessage(),
+                                "Validation Error",
+                                JOptionPane.ERROR_MESSAGE);
                         return;
                     }
-                    JOptionPane.showMessageDialog(this, "Teller Created!", "Success",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    createUserListener.onUserCreation();
                     break;
                 default:
                     throw new IllegalArgumentException("Admin cannot be created");
