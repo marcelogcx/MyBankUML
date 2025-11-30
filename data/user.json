@@ -1,0 +1,21 @@
+{
+  "123" : {
+    "id" : "123",
+    "userType" : "ADMIN",
+    "fullname" : "main admin",
+    "email" : "admin@admin.com",
+    "username" : "admin@gmail.com",
+    "password" : "Password123!",
+    "isUserBlocked" : false
+  },
+  "C28157828" : {
+    "id" : "C28157828",
+    "userType" : "CLIENT",
+    "fullname" : "phil",
+    "email" : "phil@jackson.com",
+    "username" : "phil123@gmail.com",
+    "password" : "Password123!",
+    "isUserBlocked" : false,
+    "bankAccountIds" : [ ]
+  }
+}
