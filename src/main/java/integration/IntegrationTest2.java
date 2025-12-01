@@ -16,7 +16,7 @@ public class IntegrationTest2 {
                 "Test Client",
                 "client@test.com",
                 "testclient",
-                "pass123"
+                "Pass123!"
         };
         Client client = db.writeRecord(Client.class, clientData);
         client.setDatabase(db);

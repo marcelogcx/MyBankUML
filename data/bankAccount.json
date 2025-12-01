@@ -89,5 +89,26 @@
     "balance" : 380000.0,
     "operationIds" : [ ],
     "bankAccountType" : "SAVINGS"
+  },
+  "CHK23235" : {
+    "id" : "CHK23235",
+    "accountName" : "Test Checking",
+    "balance" : 800.0,
+    "operationIds" : [ "O096074", "O133322", "O377764" ],
+    "bankAccountType" : "CHECKING"
+  },
+  "CHK37314" : {
+    "id" : "CHK37314",
+    "accountName" : "Dest Account",
+    "balance" : 550.0,
+    "operationIds" : [ "O377764" ],
+    "bankAccountType" : "CHECKING"
+  },
+  "CHK19321" : {
+    "id" : "CHK19321",
+    "accountName" : "Primary Checking",
+    "balance" : 1050.0,
+    "operationIds" : [ "O321500", "O109849" ],
+    "bankAccountType" : "CHECKING"
   }
 }

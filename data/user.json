@@ -37,6 +37,16 @@
     "password" : "Aswwe123#",
     "isUserBlocked" : false
   },
+  "C71134626" : {
+    "id" : "C71134626",
+    "userType" : "CLIENT",
+    "fullname" : "Test Client",
+    "email" : "client@test.com",
+    "username" : "testclient",
+    "password" : "Pass123!",
+    "isUserBlocked" : false,
+    "bankAccountIds" : [ "CHK19321" ]
+  },
   "C00006" : {
     "id" : "C00006",
     "userType" : "CLIENT",

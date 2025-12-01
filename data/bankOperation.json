@@ -98,5 +98,51 @@
     "date" : "1996-06-18",
     "isSuccessfull" : true,
     "operationType" : "DEPOSIT"
+  },
+  "O096074" : {
+    "id" : "O096074",
+    "description" : "Test deposit",
+    "bankAccountId" : "CHK23235",
+    "amount" : 200.0,
+    "date" : "2025-11-30",
+    "isSuccessfull" : false,
+    "operationType" : "DEPOSIT"
+  },
+  "O133322" : {
+    "id" : "O133322",
+    "description" : "Test withdrawal",
+    "bankAccountId" : "CHK23235",
+    "amount" : 150.0,
+    "date" : "2025-11-30",
+    "isSuccessfull" : false,
+    "operationType" : "WITHDRAWAL"
+  },
+  "O377764" : {
+    "id" : "O377764",
+    "description" : "Test transfer",
+    "bankAccountId" : "CHK23235",
+    "recipientId" : "CHK37314",
+    "amount" : 250.0,
+    "date" : "2025-11-30",
+    "isSuccessfull" : false,
+    "operationType" : "TRANSFER"
+  },
+  "O321500" : {
+    "id" : "O321500",
+    "description" : "Client test deposit",
+    "bankAccountId" : "CHK19321",
+    "amount" : 200.0,
+    "date" : "2025-11-30",
+    "isSuccessfull" : true,
+    "operationType" : "DEPOSIT"
+  },
+  "O109849" : {
+    "id" : "O109849",
+    "description" : "Client test withdrawal",
+    "bankAccountId" : "CHK19321",
+    "amount" : 150.0,
+    "date" : "2025-11-30",
+    "isSuccessfull" : false,
+    "operationType" : "WITHDRAWAL"
   }
 }
