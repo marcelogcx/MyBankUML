@@ -124,5 +124,12 @@
     "balance" : 900.0,
     "operationIds" : [ "O513691", "O652265" ],
     "bankAccountType" : "SAVINGS"
+  },
+  "CHK66886" : {
+    "id" : "CHK66886",
+    "accountName" : "Main Checking",
+    "balance" : 500.0,
+    "operationIds" : [ ],
+    "bankAccountType" : "CHECKING"
   }
 }

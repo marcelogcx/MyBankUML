@@ -9,6 +9,15 @@
     "isUserBlocked" : false,
     "bankAccountIds" : [ "CHK00002", "SAV00002" ]
   },
+  "C11580879" : {
+    "id" : "C11580879",
+    "userType" : "TELLER",
+    "fullname" : "Teller One",
+    "email" : "teller@test.com",
+    "username" : "testteller1764560750904",
+    "password" : "Pass123!",
+    "isUserBlocked" : false
+  },
   "C00001" : {
     "id" : "C00001",
     "userType" : "CLIENT",
@@ -19,14 +28,15 @@
     "isUserBlocked" : false,
     "bankAccountIds" : [ "CHK00001", "SAV00001", "BUS00001" ]
   },
-  "A00001" : {
-    "id" : "A00001",
-    "userType" : "ADMIN",
-    "fullname" : "Phil Jackson",
-    "email" : "philjackson@bulls.com",
-    "username" : "philjackson",
-    "password" : "ChicagoBulls1996!",
-    "isUserBlocked" : false
+  "C76376003" : {
+    "id" : "C76376003",
+    "userType" : "CLIENT",
+    "fullname" : "Client One",
+    "email" : "client@test.com",
+    "username" : "testclient1764560797523",
+    "password" : "Pass123!",
+    "isUserBlocked" : false,
+    "bankAccountIds" : [ "CHK66886" ]
   },
   "C69450734" : {
     "id" : "C69450734",
@@ -37,6 +47,44 @@
     "password" : "Pass123!",
     "isUserBlocked" : false,
     "bankAccountIds" : [ "CHK16097", "SVN89423" ]
+  },
+  "C76464484" : {
+    "id" : "C76464484",
+    "userType" : "CLIENT",
+    "fullname" : "Client Two",
+    "email" : "client2@test.com",
+    "username" : "client2",
+    "password" : "Pass234!",
+    "isUserBlocked" : false,
+    "bankAccountIds" : [ ]
+  },
+  "C55684509" : {
+    "id" : "C55684509",
+    "userType" : "TELLER",
+    "fullname" : "Teller One",
+    "email" : "teller@test.com",
+    "username" : "testteller1764560797525",
+    "password" : "Pass123!",
+    "isUserBlocked" : false
+  },
+  "C51386297" : {
+    "id" : "C51386297",
+    "userType" : "CLIENT",
+    "fullname" : "Client Two",
+    "email" : "client2@test.com",
+    "username" : "testclient1764560797575",
+    "password" : "Pass234!",
+    "isUserBlocked" : false,
+    "bankAccountIds" : [ ]
+  },
+  "A00001" : {
+    "id" : "A00001",
+    "userType" : "ADMIN",
+    "fullname" : "Phil Jackson",
+    "email" : "philjackson@bulls.com",
+    "username" : "philjackson",
+    "password" : "ChicagoBulls1996!",
+    "isUserBlocked" : false
   },
   "C90805007" : {
     "id" : "C90805007",
@@ -57,6 +105,16 @@
     "isUserBlocked" : false,
     "bankAccountIds" : [ "CHK19321" ]
   },
+  "C08617848" : {
+    "id" : "C08617848",
+    "userType" : "CLIENT",
+    "fullname" : "Client One",
+    "email" : "client@test.com",
+    "username" : "testclient1764560750901",
+    "password" : "Pass123!",
+    "isUserBlocked" : false,
+    "bankAccountIds" : [ ]
+  },
   "C00006" : {
     "id" : "C00006",
     "userType" : "CLIENT",
@@ -66,6 +124,15 @@
     "password" : "Defense9!",
     "isUserBlocked" : false,
     "bankAccountIds" : [ "CHK00006", "SAV00006" ]
+  },
+  "C08343294" : {
+    "id" : "C08343294",
+    "userType" : "TELLER",
+    "fullname" : "Teller One",
+    "email" : "teller@test.com",
+    "username" : "testteller1764560732525",
+    "password" : "Pass123!",
+    "isUserBlocked" : false
   },
   "C00005" : {
     "id" : "C00005",

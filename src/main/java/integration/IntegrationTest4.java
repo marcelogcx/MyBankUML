@@ -10,7 +10,7 @@ public class IntegrationTest4 {
         Database db = new Database();
 
         System.out.println("\nADMIN LOGIN");
-        Admin admin = (Admin) db.readRecord(User.class, db.getIdFromUsername("admin"));
+        Admin admin = (Admin) db.readRecord(User.class, db.getIdFromUsername("philjackson"));
         if (admin == null) {
             System.out.println("Admin login FAILED");
             return;
@@ -18,25 +18,28 @@ public class IntegrationTest4 {
         admin.setDatabase(db);
         System.out.println("Admin login SUCCESS: " + admin.getFullname());
 
+        String client_username1 = "testclient" + System.currentTimeMillis();
+        String teller_username1 = "testteller" + System.currentTimeMillis();
         System.out.println("\nADMIN CREATES TELLER");
-        User teller = admin.register(UserType.TELLER, "Teller One", "teller@test.com", "teller1", "passTeller");
-        if (teller == null) teller = db.readRecord(User.class, db.getIdFromUsername("teller1"));
+        User teller = admin.register(UserType.TELLER, "Teller One", "teller@test.com", teller_username1, "Pass123!");
+        if (teller == null) teller = db.readRecord(User.class, db.getIdFromUsername(teller_username1));
         teller.setDatabase(db);
         System.out.println("Created TELLER id=" + teller.getId());
 
         System.out.println("\nADMIN CREATES CLIENT");
-        User client = admin.register(UserType.CLIENT, "Client One", "client@test.com", "client1", "passClient");
-        if (client == null) client = db.readRecord(User.class, db.getIdFromUsername("client1"));
+        User client = admin.register(UserType.CLIENT, "Client One", "client@test.com", client_username1, "Pass123!");
+        if (client == null) client = db.readRecord(User.class, db.getIdFromUsername(client_username1));
         client.setDatabase(db);
         System.out.println("Created CLIENT id=" + client.getId());
 
         System.out.println("\nTELLER LOGIN");
-        Teller tellerUser = (Teller) db.readRecord(User.class, db.getIdFromUsername("teller1"));
+        Teller tellerUser = (Teller) db.readRecord(User.class, db.getIdFromUsername(teller_username1));
         tellerUser.setDatabase(db);
         System.out.println("Teller login SUCCESS");
-
-        User client2 = tellerUser.register(UserType.CLIENT, "Client Two", "client2@test.com", "client2", "pass2");
-        if (client2 == null) client2 = db.readRecord(User.class, db.getIdFromUsername("client2"));
+        
+        String client_username2 = "testclient" + System.currentTimeMillis();
+        User client2 = tellerUser.register(UserType.CLIENT, "Client Two", "client2@test.com", client_username2, "Pass234!");
+        if (client2 == null) client2 = db.readRecord(User.class, db.getIdFromUsername(client_username2));
         client2.setDatabase(db);
         System.out.println("Teller created Client (ID=" + client2.getId() + ")");
 
@@ -47,7 +50,7 @@ public class IntegrationTest4 {
         System.out.println("Linked checking account " + clientAcc.getId() + " to Client 1");
 
         System.out.println("\nCLIENT LOGIN");
-        Client clientUser = (Client) db.readRecord(User.class, db.getIdFromUsername("client1"));
+        Client clientUser = (Client) db.readRecord(User.class, db.getIdFromUsername(client_username1));
         clientUser.setDatabase(db);
         System.out.println("Client login SUCCESS");
         System.out.println("Client accounts = " + clientUser.getBankAccountIds());
