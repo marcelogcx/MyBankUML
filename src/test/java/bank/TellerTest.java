@@ -9,6 +9,18 @@ import core.Database;
 
 public class TellerTest {
 
+    private static class TestDatabase extends Database {
+        @Override
+        public <T> T readRecord(Class<T> recordType, String id) {
+            if (recordType == Client.class) {
+                User u = super.readRecord(User.class, id);
+                if (u == null) return null;
+                return recordType.cast(u);
+            }
+            return super.readRecord(recordType, id);
+        }
+    }
+
     private Database db;
     private Teller teller;
     private Client client;
@@ -17,13 +29,13 @@ public class TellerTest {
 
     @Before
     public void setUp() {
-        db = new Database();
+        db = new TestDatabase();   
 
         // Create a teller with valid credentials
         String[] tellerData = {
                 "Teller User",
                 "teller@example.com",
-                "telleruser",    
+                "telleruser",     
                 "Teller123!"     
         };
         teller = db.writeRecord(Teller.class, tellerData);
@@ -43,7 +55,7 @@ public class TellerTest {
         String[] accountAData = {
                 "Account A",
                 BankAccountType.CHECKING.name(),
-                "300.0"            // starting balance for A
+                "300.0"
         };
         accountA = db.writeRecord(BankAccount.class, accountAData);
         accountA.setDatabase(db);
@@ -51,7 +63,7 @@ public class TellerTest {
         String[] accountBData = {
                 "Account B",
                 BankAccountType.SAVINGS.name(),
-                "100.0"            // starting balance for B
+                "100.0"
         };
         accountB = db.writeRecord(BankAccount.class, accountBData);
         accountB.setDatabase(db);
@@ -62,6 +74,7 @@ public class TellerTest {
     }
 
     // Log in
+
     @Test
     public void login_withValidCredentials_givesAccessToTeller() {
         assertTrue("Teller username should exist", db.usernameExists("telleruser"));
@@ -75,13 +88,17 @@ public class TellerTest {
     }
 
     // Register
+
     @Test
     public void register_createsNewClientInDatabase() {
+        String username = "newclient" + System.currentTimeMillis();
+        String email = username + "@example.com";
+
         Client created = teller.register(
                 UserType.CLIENT,
                 "New Client",
-                "newclient@example.com",
-                "newclient",
+                email,
+                username,
                 "NewClient1!"
         );
 
@@ -89,17 +106,19 @@ public class TellerTest {
 
         User fromDb = db.readRecord(User.class, created.getId());
         assertNotNull("Client must be persisted in DB", fromDb);
-        assertEquals("newclient", fromDb.getUsername());
+        assertEquals(username, fromDb.getUsername());
         assertEquals(UserType.CLIENT, fromDb.getUserType());
     }
 
     // Sign out
+
     @Test
     public void signout_doesNotThrow() {
         teller.signout();
     }
 
     // View Client
+
     @Test
     public void viewClient_returnsAccurateClientInfo() {
         User[] clients = teller.getClients(db);
@@ -117,7 +136,8 @@ public class TellerTest {
         assertTrue("Existing client should appear in teller client list", found);
     }
 
-    // Deposit
+    // Make Deposit
+
     @Test
     public void makeDeposit_increasesClientBalance() {
         double initial = accountA.getBalance();
@@ -130,6 +150,7 @@ public class TellerTest {
     }
 
     // Make Withdrawal
+
     @Test
     public void makeWithdrawal_decreasesClientBalance() {
         double initial = accountA.getBalance();
@@ -142,6 +163,7 @@ public class TellerTest {
     }
 
     // Make Transaction
+
     @Test
     public void makeTransaction_movesBalancesCorrectly() {
         double a0 = accountA.getBalance();
