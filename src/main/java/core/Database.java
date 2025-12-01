@@ -149,7 +149,11 @@ public class Database {
             // Validate username and password
             String username = recordData[2];
             String password = recordData[3];
+            String email = recordData[1];
 
+            if (!ValidationUtil.isValidEmail(email)) {
+                throw new IllegalArgumentException(ValidationUtil.getEmailErrorMessage(email));
+            }
             if (!ValidationUtil.isValidUsername(username)) {
                 throw new IllegalArgumentException(ValidationUtil.getUsernameErrorMessage(username));
             }
@@ -169,7 +173,11 @@ public class Database {
             // Validate username and password
             String username = recordData[2];
             String password = recordData[3];
+            String email = recordData[1];
 
+            if (!ValidationUtil.isValidEmail(email)) {
+                throw new IllegalArgumentException(ValidationUtil.getEmailErrorMessage(email));
+            }
             if (!ValidationUtil.isValidUsername(username)) {
                 throw new IllegalArgumentException(ValidationUtil.getUsernameErrorMessage(username));
             }
@@ -188,7 +196,11 @@ public class Database {
             // Validate username and password
             String username = recordData[2];
             String password = recordData[3];
+            String email = recordData[1];
 
+            if (!ValidationUtil.isValidEmail(email)) {
+                throw new IllegalArgumentException(ValidationUtil.getEmailErrorMessage(email));
+            }
             if (!ValidationUtil.isValidUsername(username)) {
                 throw new IllegalArgumentException(ValidationUtil.getUsernameErrorMessage(username));
             }
@@ -393,7 +405,11 @@ public class Database {
             // Validate username and password
             String username = recordData[2];
             String password = recordData[3];
+            String email = recordData[1];
 
+            if (!ValidationUtil.isValidEmail(email)) {
+                throw new IllegalArgumentException(ValidationUtil.getEmailErrorMessage(email));
+            }
             if (!ValidationUtil.isValidUsername(username)) {
                 throw new IllegalArgumentException(ValidationUtil.getUsernameErrorMessage(username));
             }

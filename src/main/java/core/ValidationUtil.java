@@ -1,9 +1,11 @@
 package core;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 public class ValidationUtil {
+    private static final String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
 
     /**
-     * Validates that a username contains @gmail.com and is all lowercase
+     * Validates that a username is all lowercase
      *
      * @param username The username to validate
      * @return true if valid, false otherwise
@@ -13,17 +15,29 @@ public class ValidationUtil {
             return false;
         }
 
-        // Check if username contains @gmail.com
-        if (!username.contains("@gmail.com")) {
-            return false;
-        }
-
         // Check if username is all lowercase
         if (!username.equals(username.toLowerCase())) {
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * Validates that the email is valid
+     *
+     * @param username The username to validate
+     * @return true if valid, false otherwise
+     */
+    public static boolean isValidEmail(String email) {
+        if (email == null || email.isEmpty()) {
+            return false;
+        }
+        // Check if username contains @gmail.com
+        Pattern pattern = Pattern.compile(EMAIL_REGEX);
+        Matcher matcher = pattern.matcher(email);
+        
+        return matcher.matches();
     }
 
     /**
@@ -57,6 +71,24 @@ public class ValidationUtil {
     }
 
     /**
+     * Gets a user-friendly error message for email validation failure
+     *
+     * @param email The invalid email
+     * @return Error message explaining what's wrong
+     */
+    public static String getEmailErrorMessage(String email) {
+        if (email == null || email.isEmpty()) {
+            return "Email cannot be empty";
+        }
+        Pattern pattern = Pattern.compile(EMAIL_REGEX);
+        Matcher matcher = pattern.matcher(email);
+        
+        if (!matcher.matches()) {
+            return "Email format is invalid";
+        }
+        return "Invalid email";
+    }
+    /**
      * Gets a user-friendly error message for username validation failure
      *
      * @param username The invalid username
@@ -65,9 +97,6 @@ public class ValidationUtil {
     public static String getUsernameErrorMessage(String username) {
         if (username == null || username.isEmpty()) {
             return "Username cannot be empty";
-        }
-        if (!username.contains("@gmail.com")) {
-            return "Username must contain @gmail.com";
         }
         if (!username.equals(username.toLowerCase())) {
             return "Username must be all lowercase";
