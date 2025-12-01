@@ -2,6 +2,8 @@ package bank;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,68 +20,113 @@ public class ClientTest {
     public void setUp() {
         db = new Database();
 
-        String[] clientData = { "Client User", "client@example.com", "clientUser", "pass" };
+        // Create client with VALID username/password 
+        String[] clientData = {
+                "Client User",
+                "client@example.com",
+                "clientuser",    
+                "Client123!"     
+        };
         client = db.writeRecord(Client.class, clientData);
         client.setDatabase(db);
 
-        String[] acc1 = { client.getId(), "CHECKING", "A", "200.0" };
-        String[] acc2 = { client.getId(), "SAVINGS", "B", "100.0" };
-        accountA = db.writeRecord(BankAccount.class, acc1);
-        accountB = db.writeRecord(BankAccount.class, acc2);
-        accountA.setDatabase(db);
-        accountB.setDatabase(db);
+        // Create two accounts
+        String[] accountAData = {
+                "Account A",
+                BankAccountType.CHECKING.name(),
+                "300.0"
+        };
+        accountA = db.writeRecord(BankAccount.class, accountAData);
 
+        String[] accountBData = {
+                "Account B",
+                BankAccountType.SAVINGS.name(),
+                "100.0"
+        };
+        accountB = db.writeRecord(BankAccount.class, accountBData);
+
+        // Link accounts to client so operations are allowed
         client.linkBankAccount(accountA.getId());
         client.linkBankAccount(accountB.getId());
-        db.saveFiles();
     }
 
+    // Log in
+
+    // Given valid client credentials, when logging in,
+    // the system gives access to the client account.
     @Test
     public void login_withValidCredentials_givesAccessToClient() {
-        assertTrue(db.usernameExists("clientUser"));
-        String id = db.getIdFromUsername("clientUser");
-        User u = db.readRecord(User.class, id);
-        assertNotNull(u);
-        assertEquals("pass", u.getPassword());
-        assertEquals(UserType.CLIENT, u.getUserType());
+        assertTrue("Client username should exist", db.usernameExists("clientuser"));
+
+        String id = db.getIdFromUsername("clientuser");
+        User loaded = db.readRecord(User.class, id);
+
+        assertNotNull("Client should be found in DB", loaded);
+        assertEquals("Client123!", loaded.getPassword());
+        assertEquals(UserType.CLIENT, loaded.getUserType());
     }
 
+    // Sign out
     @Test
     public void signout_doesNotThrow() {
         client.signout();
     }
 
+    //Visualize Account
     @Test
-    public void visualizeAccount_readsCorrectInformation() {
-        BankAccount fromDb = db.readRecord(BankAccount.class, accountA.getId());
-        assertNotNull(fromDb);
-        assertEquals(accountA.getId(), fromDb.getId());
-        assertEquals(accountA.getBalance(), fromDb.getBalance(), 0.0001);
+    public void visualizeAccount_returnsAccurateAccountInfo() {
+        List<BankAccount> accounts =
+                db.getClientBankAccounts(client.getBankAccountIds());
+
+        // Client has two accounts linked
+        assertEquals(2, accounts.size());
+
+        // Find Account A in the list and verify its details
+        BankAccount found = null;
+        for (BankAccount a : accounts) {
+            if (a.getId().equals(accountA.getId())) {
+                found = a;
+                break;
+            }
+        }
+
+        assertNotNull("Account A should be visible to the client", found);
+        assertEquals("Account A", found.getAccountName());
+        assertEquals(BankAccountType.CHECKING, found.getBankAccountType());
+        assertEquals(300.0, found.getBalance(), 0.0001);
     }
 
+    //Make Transaction
     @Test
     public void makeDeposit_increasesBalance() {
-        double old = accountA.getBalance();
-        Deposit d = client.makeDeposit(accountA.getId(), 30.0, "client deposit");
-        assertNotNull(d);
-        assertEquals(old + 30.0, accountA.getBalance(), 0.0001);
+        double initial = accountA.getBalance();
+
+        Deposit d = client.makeDeposit(accountA.getId(), 50.0, "client deposit");
+        assertNotNull("Deposit should be created", d);
+
+        assertEquals(initial + 50.0, accountA.getBalance(), 0.0001);
     }
 
+    // Make Withdrawal
     @Test
-    public void makeWithdrawal_decreasesBalance_whenEnoughFunds() {
-        double old = accountA.getBalance();
-        Withdrawal w = client.makeWithdrawal(accountA.getId(), 20.0, "client withdraw");
-        assertNotNull(w);
-        assertEquals(old - 20.0, accountA.getBalance(), 0.0001);
+    public void makeWithdrawal_decreasesBalance() {
+        double initial = accountA.getBalance();
+
+        Withdrawal w = client.makeWithdrawal(accountA.getId(), 30.0, "client withdrawal");
+        assertNotNull("Withdrawal should be created", w);
+
+        assertEquals(initial - 30.0, accountA.getBalance(), 0.0001);
     }
 
+    // Make Deposit
     @Test
     public void makeTransaction_movesMoneyBetweenTwoAccounts() {
         double a0 = accountA.getBalance();
         double b0 = accountB.getBalance();
 
-        Transfer t = client.makeTransaction(accountA.getId(), accountB.getId(), 50.0, "client transfer");
-        assertNotNull(t);
+        Transfer t = client.makeTransaction(accountA.getId(), accountB.getId(),
+                                            50.0, "client transfer");
+        assertNotNull("Transfer should be created", t);
 
         assertEquals(a0 - 50.0, accountA.getBalance(), 0.0001);
         assertEquals(b0 + 50.0, accountB.getBalance(), 0.0001);
