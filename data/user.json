@@ -28,6 +28,16 @@
     "password" : "ChicagoBulls1996!",
     "isUserBlocked" : false
   },
+  "C69450734" : {
+    "id" : "C69450734",
+    "userType" : "CLIENT",
+    "fullname" : "Multi-Account Client",
+    "email" : "multi@test.com",
+    "username" : "multiclient",
+    "password" : "Pass123!",
+    "isUserBlocked" : false,
+    "bankAccountIds" : [ "CHK16097", "SVN89423" ]
+  },
   "C90805007" : {
     "id" : "C90805007",
     "userType" : "TELLER",

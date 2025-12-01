@@ -16,7 +16,7 @@ public class IntegrationTest3 {
                 "Multi-Account Client",
                 "multi@test.com",
                 "multiclient",
-                "pass456"
+                "Pass123!"
         };
         Client client = db.writeRecord(Client.class, clientData);
         client.setDatabase(db);

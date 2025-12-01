@@ -144,5 +144,33 @@
     "date" : "2025-11-30",
     "isSuccessfull" : false,
     "operationType" : "WITHDRAWAL"
+  },
+  "O513691" : {
+    "id" : "O513691",
+    "description" : "Rent payment",
+    "bankAccountId" : "CHK16097",
+    "recipientId" : "SVN89423",
+    "amount" : 400.0,
+    "date" : "2025-11-30",
+    "isSuccessfull" : false,
+    "operationType" : "TRANSFER"
+  },
+  "O652265" : {
+    "id" : "O652265",
+    "description" : "Bonus",
+    "bankAccountId" : "SVN89423",
+    "amount" : 200.0,
+    "date" : "2025-11-30",
+    "isSuccessfull" : true,
+    "operationType" : "DEPOSIT"
+  },
+  "O976238" : {
+    "id" : "O976238",
+    "description" : "Groceries",
+    "bankAccountId" : "CHK16097",
+    "amount" : 100.0,
+    "date" : "2025-11-30",
+    "isSuccessfull" : false,
+    "operationType" : "WITHDRAWAL"
   }
 }

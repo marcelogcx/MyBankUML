@@ -110,5 +110,19 @@
     "balance" : 1050.0,
     "operationIds" : [ "O321500", "O109849" ],
     "bankAccountType" : "CHECKING"
+  },
+  "CHK16097" : {
+    "id" : "CHK16097",
+    "accountName" : "Checking A",
+    "balance" : 1000.0,
+    "operationIds" : [ "O513691", "O976238" ],
+    "bankAccountType" : "CHECKING"
+  },
+  "SVN89423" : {
+    "id" : "SVN89423",
+    "accountName" : "Savings B",
+    "balance" : 900.0,
+    "operationIds" : [ "O513691", "O652265" ],
+    "bankAccountType" : "SAVINGS"
   }
 }
