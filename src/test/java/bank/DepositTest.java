@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import core.Database;
 
-public class DepositOperationTest {
+public class DepositTest {
 
     private Database db;
     private Client client;
@@ -37,3 +37,4 @@ public class DepositOperationTest {
         assertTrue(d.getIsSuccessfull());
     }
 }
+
