@@ -28,6 +28,15 @@
     "password" : "ChicagoBulls1996!",
     "isUserBlocked" : false
   },
+  "C90805007" : {
+    "id" : "C90805007",
+    "userType" : "TELLER",
+    "fullname" : "teller1",
+    "email" : "teller@gmail.com",
+    "username" : "teller1",
+    "password" : "Aswwe123#",
+    "isUserBlocked" : false
+  },
   "C00006" : {
     "id" : "C00006",
     "userType" : "CLIENT",
