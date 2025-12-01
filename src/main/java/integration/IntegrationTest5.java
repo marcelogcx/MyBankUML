@@ -11,7 +11,7 @@ public class IntegrationTest5 {
         Database db = new Database();
 
         System.out.println("\nADMIN LOGIN");
-        Admin admin = (Admin) db.readRecord(User.class, db.getIdFromUsername("admin"));
+        Admin admin = (Admin) db.readRecord(User.class, db.getIdFromUsername("philjackson"));
         if (admin == null) {
             System.out.println("Admin login FAILED");
             return;
@@ -20,12 +20,14 @@ public class IntegrationTest5 {
         System.out.println("Admin login SUCCESS");
 
         System.out.println("\nADMIN CREATES USERS");
-        User u1 = admin.register(UserType.CLIENT, "DB Test Client", "dbclient@test.com", "dbc1", "test1");
-        if (u1 == null) u1 = db.readRecord(User.class, db.getIdFromUsername("dbc1"));
+        String client_username1 = "testclient" + System.currentTimeMillis();
+        String teller_username1 = "testteller" + System.currentTimeMillis();
+        User u1 = admin.register(UserType.CLIENT, "DB Test Client", "dbclient@test.com", client_username1, "Pass123!");
+        if (u1 == null) u1 = db.readRecord(User.class, db.getIdFromUsername(client_username1));
         u1.setDatabase(db);
 
-        User u2 = admin.register(UserType.TELLER, "DB Test Teller", "dbteller@test.com", "dbt1", "test2");
-        if (u2 == null) u2 = db.readRecord(User.class, db.getIdFromUsername("dbt1"));
+        User u2 = admin.register(UserType.TELLER, "DB Test Teller", "dbteller@test.com", teller_username1, "Pass123!");
+        if (u2 == null) u2 = db.readRecord(User.class, db.getIdFromUsername(teller_username1));
         u2.setDatabase(db);
 
         System.out.println("Created Client ID = " + u1.getId());

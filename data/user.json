@@ -28,6 +28,15 @@
     "isUserBlocked" : false,
     "bankAccountIds" : [ "CHK00001", "SAV00001", "BUS00001" ]
   },
+  "C74803058" : {
+    "id" : "C74803058",
+    "userType" : "TELLER",
+    "fullname" : "DB Test Client",
+    "email" : "dbclient@test.com",
+    "username" : "testclient1764560920552",
+    "password" : "Pass123!",
+    "isUserBlocked" : false
+  },
   "C76376003" : {
     "id" : "C76376003",
     "userType" : "CLIENT",
@@ -37,6 +46,25 @@
     "password" : "Pass123!",
     "isUserBlocked" : false,
     "bankAccountIds" : [ "CHK66886" ]
+  },
+  "C26122653" : {
+    "id" : "C26122653",
+    "userType" : "CLIENT",
+    "fullname" : "DB Test Teller",
+    "email" : "dbteller@test.com",
+    "username" : "testteller1764560933817",
+    "password" : "Pass123!",
+    "isUserBlocked" : false,
+    "bankAccountIds" : [ ]
+  },
+  "C42592714" : {
+    "id" : "C42592714",
+    "userType" : "TELLER",
+    "fullname" : "DB Test Client",
+    "email" : "dbclient@test.com",
+    "username" : "testclient1764560933815",
+    "password" : "Pass123!",
+    "isUserBlocked" : false
   },
   "C69450734" : {
     "id" : "C69450734",
@@ -86,6 +114,15 @@
     "password" : "ChicagoBulls1996!",
     "isUserBlocked" : false
   },
+  "C91492587" : {
+    "id" : "C91492587",
+    "userType" : "TELLER",
+    "fullname" : "DB Test Client",
+    "email" : "dbclient@test.com",
+    "username" : "testclient1764560934955",
+    "password" : "Pass123!",
+    "isUserBlocked" : false
+  },
   "C90805007" : {
     "id" : "C90805007",
     "userType" : "TELLER",
@@ -94,6 +131,26 @@
     "username" : "teller1",
     "password" : "Aswwe123#",
     "isUserBlocked" : false
+  },
+  "C74424583" : {
+    "id" : "C74424583",
+    "userType" : "CLIENT",
+    "fullname" : "DB Test Teller",
+    "email" : "dbteller@test.com",
+    "username" : "testteller1764560934958",
+    "password" : "Pass123!",
+    "isUserBlocked" : false,
+    "bankAccountIds" : [ ]
+  },
+  "C94360350" : {
+    "id" : "C94360350",
+    "userType" : "CLIENT",
+    "fullname" : "DB Test Teller",
+    "email" : "dbteller@test.com",
+    "username" : "testteller1764560920554",
+    "password" : "Pass123!",
+    "isUserBlocked" : false,
+    "bankAccountIds" : [ ]
   },
   "C71134626" : {
     "id" : "C71134626",
