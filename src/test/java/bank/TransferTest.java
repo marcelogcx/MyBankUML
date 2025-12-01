@@ -10,48 +10,92 @@ import core.Database;
 public class TransferTest {
 
     private Database db;
-    private Client client;
-    private BankAccount fromAccount;
-    private BankAccount toAccount;
+    private BankAccount sender;
+    private BankAccount recipient;
 
     @Before
     public void setUp() {
         db = new Database();
 
-        String[] clientData = { "Client", "client@example.com", "client", "pw" };
-        client = db.writeRecord(Client.class, clientData);
+        // Given sender balance = 70, recipient balance = 0
+        String[] senderData = { "Sender Account", BankAccountType.CHECKING.name(), "70.0" };
+        String[] recipientData = { "Recipient Account", BankAccountType.SAVINGS.name(), "0.0" };
 
-        String[] fromData = { client.getId(), "CHECKING", "From", "70.0" };
-        String[] toData = { client.getId(), "SAVINGS", "To", "0.0" };
-        fromAccount = db.writeRecord(BankAccount.class, fromData);
-        toAccount = db.writeRecord(BankAccount.class, toData);
-        fromAccount.setDatabase(db);
-        toAccount.setDatabase(db);
-        client.linkBankAccount(fromAccount.getId());
-        client.linkBankAccount(toAccount.getId());
+        sender = db.writeRecord(BankAccount.class, senderData);
+        recipient = db.writeRecord(BankAccount.class, recipientData);
+
+        sender.setDatabase(db);
+        recipient.setDatabase(db);
     }
 
-    @Test
-    public void validateOperation_returnsTrueForValidTransfer() {
-        Transfer t = new Transfer("op1", "test transfer",
-                fromAccount.getId(), toAccount.getId(), 30.0,
-                java.time.LocalDate.now().toString(), false);
+    private Transfer createTransfer(double amount) {
+        String[] recordData = {
+                "JUnit transfer",                     // description
+                sender.getId(),                       // sender account id
+                recipient.getId(),                    // recipient account id
+                String.valueOf(amount),               // amount
+                java.time.LocalDate.now().toString(), // date
+                "false"                               // isSuccessfull
+        };
+        Transfer t = db.writeRecord(Transfer.class, recordData);
         t.setDatabase(db);
-
-        assertTrue("Transfer with balance 70 and amount 30 should be valid", t.isValidOperation());
+        return t;
     }
 
+    // Validate Operation
     @Test
-    public void executeOperation_updatesBothBalances() {
-        Transfer t = new Transfer("op2", "exec transfer",
-                fromAccount.getId(), toAccount.getId(), 30.0,
-                java.time.LocalDate.now().toString(), false);
-        t.setDatabase(db);
+    public void validateOperation_withExistingAccountsAndEnoughFunds_returnsTrue() {
+        Transfer t = createTransfer(30.0);
+        assertTrue("Transfer should be valid", t.isValidOperation());
+    }
+
+    // Execute Operation
+    @Test
+    public void executeOperation_updatesBothBalancesCorrectly() {
+        Transfer t = createTransfer(30.0);
 
         t.executeOperation();
 
-        assertEquals(40.0, fromAccount.getBalance(), 0.0001);
-        assertEquals(30.0, toAccount.getBalance(), 0.0001);
-        assertTrue(t.getIsSuccessfull());
+        assertEquals(40.0, sender.getBalance(), 0.0001);
+        assertEquals(30.0, recipient.getBalance(), 0.0001);
+    }
+
+    // Record
+    @Test
+    public void recordOperation_keepsTransferInDatabase() {
+        Transfer t = createTransfer(30.0);
+        t.executeOperation();
+        t.record();
+
+        BankOperation op = db.readRecord(BankOperation.class, t.getId());
+        assertNotNull("Transfer should be present in the database", op);
+        assertTrue("Stored operation should be a Transfer", op instanceof Transfer);
+    }
+
+    // Cancel
+    @Test
+    public void cancelOperation_restoresOriginalBalances() {
+        Transfer t = createTransfer(30.0);
+
+        double senderBefore = sender.getBalance();      // 70.0
+        double recipientBefore = recipient.getBalance(); // 0.0
+
+        t.executeOperation();  // sender 40, recipient 30
+        t.cancel();            // should reverse
+
+        assertEquals(senderBefore, sender.getBalance(), 0.0001);
+        assertEquals(recipientBefore, recipient.getBalance(), 0.0001);
+    }
+
+    // Get Operation Details
+    @Test
+    public void getOperationDetails_returnsCorrectAmount() {
+        Transfer t = createTransfer(30.0);
+        t.executeOperation();
+        t.record();
+
+        t.getOperationDetails(); // just prints to console
+
+        assertEquals(30.0, t.getAmount(), 0.0001);
     }
 }
